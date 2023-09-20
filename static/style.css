@@ -1,0 +1,22 @@
+.drama {
+    background-color: rgb(238, 239, 242);
+    display: flex;
+    align-items: flex-start;
+    border-bottom: 1px solid #a39898; /* 添加底部邊框線 */
+    padding-bottom: 20px; /* 調整間距 */
+}
+
+div img{
+    width: 250px;
+    height: 350px;
+}
+
+.comment{
+    margin-left: 50px;
+    height: 500px; /* 設定固定高度 */
+    width: 1000px; 
+    overflow-y: auto; /* 添加垂直滾動條 */
+}
+
+
+
