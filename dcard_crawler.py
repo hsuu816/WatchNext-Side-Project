@@ -16,6 +16,7 @@ collection = mongo_connect.get_collection()
 
 chrome_options = Options()
 chrome_options.add_argument("--incognito")
+chrome_options.add_argument("--log-level=3") # 設置 log 級別為 WARNING
 user_agent = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
     "(KHTML, like Gecko) Chrome/117.0.5938.89 Safari/537.36"
