@@ -1,8 +1,8 @@
 import requests
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
-from mongodb import MongoDBConnector
+from modeules.mongodb import MongoDBConnector
 
 # 連線mongodb
 mongo_connect = MongoDBConnector('watchnext', 'comment')
@@ -72,7 +72,7 @@ def get_articles_detail(url):
         "comments": comments_list,
         "comments_count": len(comments_list),
         "url":url,
-        "create_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        "create_time": (datetime.now() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S")
     }
     query = {
         "source":article_dict["source"],
