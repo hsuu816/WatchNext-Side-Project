@@ -1,5 +1,5 @@
-import os
 import requests
+from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
 from mongodb import MongoDBConnector
 
@@ -8,11 +8,10 @@ from mongodb import MongoDBConnector
 mongo_connect = MongoDBConnector('watchnext', 'drama')
 collection = mongo_connect.get_collection()
 
-drama_urls = []
-def fetch_drama_url(page):
-    url = f'https://movies.yahoo.com.tw/drama_intheaters.html?page={page}'
-    print("URL:", url)
-    try:
+def fetch_drama_data(page):
+    drama_urls = []
+    for number in range(1, page):
+        url = f'https://movies.yahoo.com.tw/drama_intheaters.html?page={number}'
         r = requests.get(url)
         web_content = r.text
         soup = BeautifulSoup(web_content, 'html.parser')
@@ -20,11 +19,7 @@ def fetch_drama_url(page):
         for drama in soup.select('ul.release_list li'):
             drama_url = drama.select_one('div.release_foto a')['href']
             drama_urls.append(drama_url)
-            
-    except Exception as e:
-        print("ERROR:", url, e)
 
-def fetch_drama_detail(drama_urls):
     for drama in drama_urls:
         r = requests.get(drama)
         web_content = r.text
@@ -49,13 +44,12 @@ def fetch_drama_detail(drama_urls):
             "categories": categories,
             "detail": detail,
             "description": description,
-            "image": image
+            "image": image,
+            "url": drama,
+            "create_time": (datetime.now() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S")
         }
-        query = {"title": drama_dict["name"]}
+        query = {"name": drama_dict["name"]}
         update_data = {"$set": drama_dict}
         result = collection.update_one(query, update_data, upsert=True)
         print(result)
-
-for page in range(1):
-    fetch_drama_url(page)
-fetch_drama_detail(drama_urls)
+        print(name)
