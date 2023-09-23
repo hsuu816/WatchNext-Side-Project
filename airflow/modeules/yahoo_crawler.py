@@ -1,7 +1,7 @@
 import requests
 from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
-from mongodb import MongoDBConnector
+from modeules.mongodb import MongoDBConnector
 
 
 # 連線mongodb
