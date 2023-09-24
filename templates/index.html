@@ -26,34 +26,29 @@
     <button type="button" id="horrorButton" data-category="恐怖">恐怖</button>
     <button type="button" id="thrillerButton" data-category="懸疑/驚悚">懸疑/驚悚</button>
 
+    <div class="hot-drama">
+        <h3>Top 10:</h3>
+        {% for hot in hot_drama %}
+            <h3>{{ hot.name }}</h2>
+            <a href="/api/v1/detail/{{ hot.name }}">
+                <img src="{{ hot.image }}" alt="{{ hot.name }}" class="hot-drama-img">
+            </a>
+            <p>討論文章數量：{{ hot.comment_count }}</p>
+        {% endfor %}
+    </div>
 
     <div class="drama-container">
         {% for drama in dramas %}
-        <div class="drama">
+        <div class="drama_list">
             <div class="detail">
-                <img src="{{ drama.image }}" alt="{{ drama.name }}">
+                <a href="/api/v1/detail/{{ drama.name }}">
+                    <img src="{{ drama.image }}" alt="{{ drama.name }}" class="drama-img">
+                </a>
                 <h3>{{ drama.name }}</h2>
                 <p>{{ drama.eng_name }}</h3>
                 <p>類別：{{ drama.categories | join(", ") }}</p>
             </div>
-            <div class="comment">
-                {% for article in drama.comments %}
-                    <h4>{{ article.title }}</h4>
-                    <p>{{ article.release_time }}</p>
-                    {% for comment in article.comments[:7] %}
-                        <p>{{ comment }}</p>
-                    {% endfor %}  
-                {% endfor %}
-            </div>
         </div>
-        {% endfor %}
-    </div>
-
-    <div class="hot-drama">
-        {% for hot in hot_drama %}
-            <h3>{{ hot.name }}</h2>
-            <img src="{{ hot.image }}" alt="{{ hot.name }}">
-            <p>討論文章數量：{{ hot.comment_count }}</p>
         {% endfor %}
     </div>
 
