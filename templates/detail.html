@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOME</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Drama List</h1>
+    <div class="drama-container-detail">
+        {% for drama in dramas %}
+        <div class="drama">
+            <div class="detail">
+                <img src="{{ drama.image }}" alt="{{ drama.name }}" class="detail-img">
+                <h3>{{ drama.name }}</h2>
+                <p>{{ drama.eng_name }}</h3>
+            </div>
+            <div class="information">
+                <p>類別：{{ drama.categories | join(", ") }}</p>
+                {% for detail in drama.detail %}
+                    <p>{{ detail }}</p>
+                {% endfor %}
+            </div>
+        <div class="drama_description">
+            {% for drama in dramas %}
+                <p>{{ drama.description }}</p>
+            {% endfor %}
+        </div>
+            <div class="comment">
+                {% for article in drama.comments %}
+                    <a href="{{ article.url }}">
+                        <h4>{{ article.title }}</h4>
+                    </a>
+                    <p>{{ article.release_time }}</p>
+                    {% for comment in article.comments[:7] %}
+                        <p>{{ comment }}</p>
+                    {% endfor %}  
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="hot-drama">
+        {% for hot in hot_drama %}
+            <h3>{{ hot.name }}</h2>
+            <a href="/api/v1/detail/{{ hot.name }}">
+                <img src="{{ hot.image }}" alt="{{ hot.name }}">
+            </a>
+            <p>討論文章數量：{{ hot.comment_count }}</p>
+        {% endfor %}
+    </div>
+
+    <script src="/static/scripts.js"></script>
+</body>
+</html>
