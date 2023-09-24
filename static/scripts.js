@@ -19,12 +19,14 @@ document.addEventListener("DOMContentLoaded", function() {
                     // 將 responseData 中的資料插入容器中
                     responseData.dramas.forEach(function(drama) {
                         var dramaElement = document.createElement("div");
-                        dramaElement.className = "drama";
+                        dramaElement.className = "drama_list";
 
                         // 根據 responseData 生成 HTML
                         dramaElement.innerHTML = `
                             <div class="detail">
-                                <img src="${drama.image}" alt="${drama.name}">
+                                <a href="/api/v1/detail/${ drama.name }">
+                                    <img src="${drama.image}" alt="${drama.name}" class="drama-img">
+                                </a>
                                 <h3>${drama.name}</h3>
                                 <p>${drama.eng_name}</p>
                                 <p>類別：${drama.categories.join(", ")}</p>
