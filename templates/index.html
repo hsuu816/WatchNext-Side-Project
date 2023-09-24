@@ -3,14 +3,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HOME</title>
-    <link rel="stylesheet" href="\static\style.css">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <h1>Drama List</h1>
-    <!-- <button type="button" id="allButton">All</button>
-    <button type="button" id="loveButton">愛情</button>
-    <button type="button" id="warmthButton">溫馨/家庭</button>
-    <button type="button" id="animationButton">動畫</button> -->
+    <h3>戲劇類型</h3>
+    <button type="button" id="funnyButton" data-category="喜劇">喜劇</button>
+    <button type="button" id="loveButton" data-category="愛情">愛情</button>
+    <button type="button" id="warmthButton" data-category="溫馨/家庭">溫馨/家庭</button>
+    <button type="button" id="animationButton" data-category="動畫">動畫</button>
+    <button type="button" id="musicButton" data-category="音樂/歌舞">音樂/歌舞</button>
+    <button type="button" id="historyButton" data-category="歷史/傳記">歷史/傳記</button>
+    <button type="button" id="warButton" data-category="戰爭">戰爭</button>
+    <button type="button" id="documentaryButton" data-category="紀錄片">紀錄片</button>
+    <button type="button" id="inspirationalButton" data-category="勵志">勵志</button>
+    <button type="button" id="martialButton" data-category="武俠">武俠</button>
+    <button type="button" id="adventureButton" data-category="冒險">冒險</button>
+    <button type="button" id="scienceButton" data-category="科幻">科幻</button>
+    <button type="button" id="fantasyButton" data-category="奇幻">奇幻</button>
+    <button type="button" id="plotButton" data-category="劇情">劇情</button>
+    <button type="button" id="crimeButton" data-category="犯罪">犯罪</button>
+    <button type="button" id="horrorButton" data-category="恐怖">恐怖</button>
+    <button type="button" id="thrillerButton" data-category="懸疑/驚悚">懸疑/驚悚</button>
+
+
     <div class="drama-container">
         {% for drama in dramas %}
         <div class="drama">
@@ -32,5 +48,15 @@
         </div>
         {% endfor %}
     </div>
+
+    <div class="hot-drama">
+        {% for hot in hot_drama %}
+            <h3>{{ hot.name }}</h2>
+            <img src="{{ hot.image }}" alt="{{ hot.name }}">
+            <p>討論文章數量：{{ hot.comment_count }}</p>
+        {% endfor %}
+    </div>
+
+    <script src="/static/scripts.js"></script>
 </body>
 </html>
