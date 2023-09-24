@@ -6,17 +6,50 @@
     padding-bottom: 20px; /* 調整間距 */
 }
 
-div img{
+.drama-img{
     width: 250px;
     height: 350px;
+}
+
+.detail-img{
+    width: 250px;
+    height: 350px;
+}
+
+.hot-drama-img{
+    width: 150px;
+    height: 250px;
 }
 
 .comment{
     margin-left: 50px;
     height: 500px; /* 設定固定高度 */
-    width: 1000px; 
+    width: 400px; 
     overflow-y: auto; /* 添加垂直滾動條 */
 }
 
+.drama_description{
+    width: 400px;
+}
 
+.information{
+    width: 400px;
+}
 
+.drama-container {
+    display: flex;
+    flex-wrap: wrap; /* 換行 */
+    justify-content: flex-start;
+}
+
+.drama_list {
+    width: 250px;
+    height: 460px;
+    margin: 20px;
+}
+
+.hot-drama {
+    background-color: rgb(238, 239, 242);
+    float: right;
+    margin-left: 20px;
+}
