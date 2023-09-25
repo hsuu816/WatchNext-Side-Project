@@ -7,15 +7,17 @@ from models.mongo_aggregate import *
 app = Flask(__name__)
 
 # 連線mongodb
-mongo_connect = MongoDBConnector('watchnext', 'drama')
-drama_collection = mongo_connect.get_collection()
+mongo_connect_comment = MongoDBConnector('watchnext', 'comment')
+comment_collection = mongo_connect_comment.get_collection()
+mongo_connect_drama = MongoDBConnector('watchnext', 'drama')
+drama_collection = mongo_connect_drama.get_collection()
 
 
 @app.route('/', methods=['GET'])
 def get_drama():
     # 從mongodb中擷取資料
     drama_data = drama_collection.find({}).limit(20)
-    hot_drama_data = drama_collection.aggregate(hot_drama())
+    hot_drama_data = comment_collection.aggregate(hot_drama())
     return render_template('index.html', dramas=drama_data, hot_drama=hot_drama_data)
 
 @app.route('/api/v1/category/<category>', methods=['GET'])
