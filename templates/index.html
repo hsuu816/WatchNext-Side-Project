@@ -29,11 +29,11 @@
     <div class="hot-drama">
         <h3>Top 10:</h3>
         {% for hot in hot_drama %}
-            <h3>{{ hot.name }}</h2>
-            <a href="/api/v1/detail/{{ hot.name }}">
-                <img src="{{ hot.image }}" alt="{{ hot.name }}" class="hot-drama-img">
-            </a>
-            <p>討論文章數量：{{ hot.comment_count }}</p>
+            <h3>{{ hot.detail[0].name }}</h3>
+            <a href="/api/v1/detail/{{ hot.detail[0].name }}">
+                <img src="{{ hot.detail[0].image }}" alt="{{ hot.detail[0].name }}" class="hot-drama-img">
+            </a> 
+            <p>討論文章數量：{{ hot.count }}</p>
         {% endfor %}
     </div>
 
