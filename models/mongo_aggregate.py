@@ -33,26 +33,36 @@ def drama_detail(name):
 def hot_drama():
     hot_drama = [
         {
-            "$lookup": {
-                "from": "comment",
-                "localField": "name",
-                "foreignField": "drama_name",
-                "as": "comments"
+            "$group": {
+                "_id": "$drama_name",
+                "count": {"$sum": 1}
             }
         },
+        {
+            "$sort": { "count": -1 }
+        },
+        {
+            "$skip":1
+        },
+        {
+            "$limit": 10
+        },
+        {
+            "$lookup": {
+                "from": "drama",
+                "localField": "_id",
+                "foreignField": "name",
+                "as": "detail"
+        }},
         {
             "$project": {
-                "_id": 0,
-                "name": 1,
-                "image":1,
-                "comment_count": { "$size": "$comments" } # 計算評論數
+              "_id": 0,
+              "count": 1,
+              "detail": {
+                "name":1,
+                "image": 1
+                }
             }
-        },
-        {
-            "$sort": { "comment_count": -1 } # 依照評論多到少排序
-        },
-        {
-            "$limit": 10  # 只顯示前十名
         }
     ]
     return hot_drama
