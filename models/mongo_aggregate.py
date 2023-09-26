@@ -53,7 +53,8 @@ def hot_drama():
                 "localField": "_id",
                 "foreignField": "name",
                 "as": "detail"
-        }},
+            }
+        },
         {
             "$project": {
               "_id": 0,
@@ -66,3 +67,38 @@ def hot_drama():
         }
     ]
     return hot_drama
+
+def recommend_same_category_drama(category, name):
+    recommend_same_category_drama = [
+        {
+            "$match": {
+            "categories": category,
+            "name": { "$ne": name }
+            }
+        },
+        {
+            "$limit": 50
+        },
+        {
+            "$lookup": {
+            "from": "comment",
+            "localField": "name",
+            "foreignField": "drama_name",
+            "as": "comment"
+            }
+        },
+        {
+            "$project": {
+            "name": 1,
+            "image": 1,
+            "comment_count": { "$size": "$comment" }
+            }
+        },
+        {
+            "$sort": {"comment_count": -1}
+        },
+        {
+            "$limit": 4
+        }
+]
+    return recommend_same_category_drama
