@@ -31,7 +31,12 @@ def category_select(category):
 def get_drama_detail(name):
     encoded_name = urllib.parse.unquote(name)
     drama_detail_data = list(drama_collection.aggregate(drama_detail(encoded_name)))
-    return render_template('detail.html', dramas=drama_detail_data)
+    if drama_detail_data[0]["categories"]:
+        category = drama_detail_data[0]["categories"][0] # 先只取一個類型標籤
+    else:
+        category = ""
+    recommend_drama = drama_collection.aggregate(recommend_same_category_drama(category, encoded_name))
+    return render_template('detail.html', dramas=drama_detail_data, recommend_drama=recommend_drama)
 
 
 if __name__ == '__main__':
