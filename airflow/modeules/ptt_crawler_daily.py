@@ -1,16 +1,16 @@
 import requests
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
-from mongodb import MongoDBConnector
+from modeules.mongodb import MongoDBConnector
 
 # 連線mongodb
 mongo_connect = MongoDBConnector('watchnext', 'comment')
 collection = mongo_connect.get_collection()
 
 # 獲取文章連結
-def get_all_articles(url):
-    while url:
+def get_all_articles(url, page):
+    for _ in range(page):
         r = requests.get(url)
         web_content = r.text
         soup = BeautifulSoup(web_content, 'html.parser')
@@ -28,7 +28,6 @@ def get_all_articles(url):
             time.sleep(0.1)
         else:
             url = None
-            print('Done')
 
 # 獲取文章內容並插入mongo db
 def get_articles_detail(url):
@@ -71,7 +70,9 @@ def get_articles_detail(url):
         "release_time": release_time,
         "content": content,
         "comments": comments_list,
-        "comments_count": len(comments_list)
+        "comments_count": len(comments_list),
+        "url":url,
+        "create_time": (datetime.now() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S")
     }
     query = {
         "source":article_dict["source"],
@@ -83,5 +84,3 @@ def get_articles_detail(url):
     result = collection.update_one(query, update_data, upsert=True)
     print(result)
     print(title, release_time)
-
-article_urls = get_all_articles('https://www.ptt.cc/bbs/China-Drama/index.html')
