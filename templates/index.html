@@ -1,36 +1,90 @@
 <!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>HOME</title>
-    <link rel="stylesheet" href="\static\style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Drama List</h1>
-    <!-- <button type="button" id="allButton">All</button>
-    <button type="button" id="loveButton">愛情</button>
-    <button type="button" id="warmthButton">溫馨/家庭</button>
-    <button type="button" id="animationButton">動畫</button> -->
-    <div class="drama-container">
-        {% for drama in dramas %}
-        <div class="drama">
-            <div class="detail">
-                <img src="{{ drama.image }}" alt="{{ drama.name }}">
-                <h3>{{ drama.name }}</h2>
-                <p>{{ drama.eng_name }}</h3>
-                <p>類別：{{ drama.categories | join(", ") }}</p>
-            </div>
-            <div class="comment">
-                {% for article in drama.comments %}
-                    <h4>{{ article.title }}</h4>
-                    <p>{{ article.release_time }}</p>
-                    {% for comment in article.comments[:7] %}
-                        <p>{{ comment }}</p>
-                    {% endfor %}  
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #00416A;" >
+        <div class="container-fluid">
+          <h1 class="text-white">Watch Next</h1>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ml-auto">
+              <li class="nav-item">
+                <a class="nav-link active text-white" aria-current="page" href="/">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-white" href="#">Dashboard</a>
+              </li>
+            </ul>
+            <!-- <form class="d-flex" role="search">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-sm btn-outline-secondary text-white" type="button">Search</button>
+            </form> -->
+          </div>
+        </div>
+      </nav>
+    <!-- <h3 blockquote class="blockquote">戲劇類型</h3> -->
+    <div class="categories-button">
+        <button type="button" id="funnyButton" data-category="喜劇" class="btn btn-outline-primary btn-sm">喜劇</button>
+        <button type="button" id="loveButton" data-category="愛情" class="btn btn-outline-primary btn-sm">愛情</button>
+        <button type="button" id="warmthButton" data-category="溫馨/家庭" class="btn btn-outline-primary btn-sm">溫馨/家庭</button>
+        <button type="button" id="animationButton" data-category="動畫" class="btn btn-outline-primary btn-sm">動畫</button>
+        <button type="button" id="musicButton" data-category="音樂/歌舞" class="btn btn-outline-primary btn-sm">音樂/歌舞</button>
+        <button type="button" id="historyButton" data-category="歷史/傳記" class="btn btn-outline-primary btn-sm">歷史/傳記</button>
+        <button type="button" id="warButton" data-category="戰爭" class="btn btn-outline-primary btn-sm">戰爭</button>
+        <button type="button" id="documentaryButton" data-category="紀錄片" class="btn btn-outline-primary btn-sm">紀錄片</button>
+        <button type="button" id="inspirationalButton" data-category="勵志" class="btn btn-outline-primary btn-sm">勵志</button>
+        <button type="button" id="martialButton" data-category="武俠" class="btn btn-outline-primary btn-sm">武俠</button>
+        <button type="button" id="adventureButton" data-category="冒險" class="btn btn-outline-primary btn-sm">冒險</button>
+        <button type="button" id="scienceButton" data-category="科幻" class="btn btn-outline-primary btn-sm">科幻</button>
+        <button type="button" id="fantasyButton" data-category="奇幻" class="btn btn-outline-primary btn-sm">奇幻</button>
+        <button type="button" id="plotButton" data-category="劇情" class="btn btn-outline-primary btn-sm">劇情</button>
+        <button type="button" id="crimeButton" data-category="犯罪" class="btn btn-outline-primary btn-sm">犯罪</button>
+        <button type="button" id="horrorButton" data-category="恐怖" class="btn btn-outline-primary btn-sm">恐怖</button>
+        <button type="button" id="thrillerButton" data-category="懸疑/驚悚" class="btn btn-outline-primary btn-sm">懸疑/驚悚</button>
+    </div>
+
+    <div class="row g-0 text-center">
+        <div class="col-sm-6 col-md-10">
+            <div class="row">
+                {% for drama in dramas %}
+                <div class="col-md-4">
+                    <div class="card drama_list" style="width: 18rem;">
+                        <a href="/api/v1/detail/{{ drama.name }}">
+                            <img src="{{ drama.image }}" alt="{{ drama.name }}" class="drama-img">
+                        </a>
+                        <div class="card-body">
+                            <h6 class="card-title">{{ drama.name }}</h6>
+                            <p class="card-text">{{ drama.eng_name }}</p>
+                            {% for category in drama.categories %}
+                                <span class="badge rounded-pill bg-primary text-white">{{ category }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
                 {% endfor %}
             </div>
         </div>
-        {% endfor %}
+        <div class="col-6 col-md-2">
+            <div class="hot-drama">
+                <h3>Top 10</h3>
+                {% for hot in hot_drama %}
+                    <a href="/api/v1/detail/{{ hot.detail[0].name }}">
+                        <img src="{{ hot.detail[0].image }}" alt="{{ hot.detail[0].name }}" class="hot-drama-img">
+                    </a>
+                    <h6>{{ hot.detail[0].name }}</h6>
+                    <p>{{ hot.count }}篇討論文</p>
+                {% endfor %}
+            </div>
+        </div>
     </div>
+
+    <script src="/static/scripts.js"></script>
 </body>
 </html>

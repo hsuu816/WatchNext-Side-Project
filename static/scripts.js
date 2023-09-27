@@ -1,0 +1,53 @@
+document.addEventListener("DOMContentLoaded", function() {
+    var buttons = document.querySelectorAll("button[data-category]");
+    
+    buttons.forEach(function(button) {
+        button.addEventListener("click", function() {
+            var category = encodeURIComponent(this.getAttribute("data-category"));
+            console.log("Button clicked!");
+            
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/api/v1/category/" + encodeURIComponent(category), true);
+            
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var responseData = JSON.parse(xhr.responseText);
+            
+                    // 找到用於顯示戲劇資訊的容器元素
+                    var dramaContainer = document.querySelector(".row");
+            
+                    // 清空容器內的現有內容
+                    dramaContainer.innerHTML = "";
+            
+                    // 遍歷responseData中的資料並插入到容器中
+                    responseData.dramas.forEach(function(drama) {
+                        var dramaElement = document.createElement("div");
+                        dramaElement.className = "col-md-3"; // 確保每個卡片佔用相同的列寬
+            
+                        // 把category一個個取出放入html
+                        const categoriesHTML = drama.categories.map(category => `
+                            <span class="badge rounded-pill bg-primary text-white">${category}</span>`).join('');
+            
+                        // 生成html內容
+                        dramaElement.innerHTML = `
+                            <div class="card drama_list" style="width: 18rem;">
+                                <a href="/api/v1/detail/${drama.name}">
+                                    <img src="${drama.image}" alt="${drama.name}" class="drama-img">
+                                </a>
+                                <div class="card-body">
+                                    <h6 class="card-title">${drama.name}</h6>
+                                    <p class="card-text">${drama.eng_name}</p>
+                                    ${categoriesHTML}
+                                </div>
+                            </div>
+                        `;
+            
+                        // 插入到html容器中
+                        dramaContainer.appendChild(dramaElement);
+                    });
+                }
+            };
+            xhr.send();
+        });
+    });
+});
