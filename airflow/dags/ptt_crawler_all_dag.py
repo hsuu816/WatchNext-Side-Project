@@ -9,7 +9,6 @@ default_args = {
     'owner': 'Bonnie',
     'depends_on_past': False,
     'start_date': '2023-09-27 4:00:00',
-    'schedule_interval': '@once',
     'email': ['hsuu816@gmail.com'],
     'email_on_failure': True,
     'email_on_retry': False,
@@ -18,7 +17,7 @@ default_args = {
     'catchup': False
 }
 
-dag = DAG('crawler_data_into_mongodb', default_args=default_args)
+dag = DAG('crawler_data_into_mongodb', default_args=default_args, schedule_interval='@once')
 
 t1 = EmptyOperator(
     task_id = 'start',
