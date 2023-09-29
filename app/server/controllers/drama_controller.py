@@ -1,10 +1,8 @@
-from flask import Flask, render_template, jsonify
+from flask import render_template, jsonify
 import urllib.parse
-
-from models.mongodb import MongoDBConnector
-from models.mongo_aggregate import *
-
-app = Flask(__name__)
+from server import app
+from server.models.mongodb import MongoDBConnector
+from server.models.mongo_aggregate import hot_drama, drama_detail, recommend_same_category_drama
 
 # 連線mongodb
 mongo_connect_comment = MongoDBConnector('watchnext', 'comment')
@@ -37,7 +35,3 @@ def get_drama_detail(name):
         category = ""
     recommend_drama = drama_collection.aggregate(recommend_same_category_drama(category, encoded_name))
     return render_template('detail.html', dramas=drama_detail_data, recommend_drama=recommend_drama)
-
-
-if __name__ == '__main__':
-    app.run(debug=True, port=5000, host='0.0.0.0')
