@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOME</title>
+    <link rel="stylesheet" href="\static\style.css">
+</head>
+<body>
+    <h1>Drama List</h1>
+    <!-- <button type="button" id="allButton">All</button>
+    <button type="button" id="loveButton">愛情</button>
+    <button type="button" id="warmthButton">溫馨/家庭</button>
+    <button type="button" id="animationButton">動畫</button> -->
+    <div class="drama-container">
+        {% for drama in dramas %}
+        <div class="drama">
+            <div class="detail">
+                <img src="{{ drama.image }}" alt="{{ drama.name }}">
+                <h3>{{ drama.name }}</h2>
+                <p>{{ drama.eng_name }}</h3>
+                <p>類別：{{ drama.categories | join(", ") }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
+
