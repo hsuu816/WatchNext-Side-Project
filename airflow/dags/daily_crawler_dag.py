@@ -10,7 +10,6 @@ default_args = {
     'owner': 'Bonnie',
     'depends_on_past': False,
     'start_date': '2023-09-22 08:30:00',
-    'schedule_interval': '@hourly',
     'email': ['hsuu816@gmail.com'],
     'email_on_failure': True,
     'email_on_retry': False,
@@ -18,7 +17,7 @@ default_args = {
     'retry_delay': timedelta(minutes=1)
 }
 
-dag = DAG('daily_crawler_data_into_mongodb', default_args=default_args)
+dag = DAG('daily_crawler_data_into_mongodb', default_args=default_args, schedule_interval='@daily')
 
 t1 = EmptyOperator(
     task_id = 'start',
