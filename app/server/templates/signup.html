@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>HOME</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="flash text-center">
+        <!-- flash-->
+         {% with messages = get_flashed_messages() %}
+         {% if messages %}
+             {% for message in messages %}
+                 <p>{{ message }}</p>
+             {% endfor %}
+         {% endif %}
+         {% endwith %}
+    </div>
+    <div class="login">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            {{ form.csrf_token }}
+            <h2 class="text-center">Sign Up</h2>
+            <!-- Email input -->
+            <div class="form-outline mb-4">
+                <input type="email" class="form-control" name="email" placeholder="Email address"/>
+            </div>
+        
+            <!-- Username input -->
+            <div class="form-outline mb-4">
+                <input type="text" class="form-control" name="username" placeholder="username"/>
+            </div>
+
+            <!-- Password input -->
+            <div class="form-outline mb-4">
+                <input type="password" class="form-control" name="password" placeholder="Password"/>
+            </div>
+            
+            <!-- Pass_confirm input -->
+            <div class="form-outline mb-4">
+                <input type="password" class="form-control" name="pass_confirm" placeholder="Password Check"/>
+            </div>
+        
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary btn-block mb-4">Sign Up</button>
+        
+            <!-- Register buttons -->
+            <div class="text-center">
+                <p>Already a member? <a href="/login">Login</a></p>
+                <a href="/">Home</a>
+            </div>
+        </form>
+    </div>
+</body>

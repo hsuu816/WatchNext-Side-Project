@@ -65,3 +65,15 @@
     display: flex;
     justify-content: flex-start;
 }
+
+.login {
+    margin: 0px auto; 
+    border: 1px solid #a2b9d4;
+    padding: 20px;
+    max-width: 400px; /* 设置最大宽度，可以根据需要调整 */
+}
+
+.flash {
+    margin: 20px 20px 0px 20px;
+    min-height: 50px;
+}
