@@ -28,6 +28,12 @@ def category_select(category):
     drama_data = list(drama_collection.find({"categories": encoded_category}, {"_id": 0}).limit(20))
     return jsonify({"dramas": drama_data})
 
+@app.route('/api/v1/search/<keyword>', methods=['GET'])
+def search(keyword):
+    encoded_keyword = urllib.parse.unquote(keyword)
+    drama_data = list(drama_collection.find({"name": {"$regex":encoded_keyword}}, {"_id": 0}))
+    return jsonify({"dramas": drama_data})
+
 
 @app.route('/api/v1/detail/<name>',  methods=['GET'])
 def get_drama_detail(name):
