@@ -38,6 +38,7 @@ def get_drama_detail(name):
     else:
         category = ""
     recommend_drama = drama_collection.aggregate(recommend_same_category_drama(category, encoded_name))
+    score = None
     if current_user.is_authenticated:
         user_id = current_user.id
         drama_id = Drama.find_id_by_name(name)
