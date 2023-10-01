@@ -9,12 +9,12 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user.check_password(form.password.data) and user is not None:
+        if user is not None and user.check_password(form.password.data):
             login_user(user)
             # flash("您已經成功的登入")
             return redirect(url_for('get_drama'))
         else:
-            flash("帳密錯誤，請重新登入。")
+            flash("帳密錯誤，請重新輸入。")
             return render_template('login.html', form=form)
     return render_template('login.html', form=form)
 
