@@ -51,3 +51,51 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const stars = document.querySelectorAll('#rating-stars i');
+    // 獲取資料庫儲存的評分數據，如果沒有就預設為0
+    const scoreElement = document.getElementById('score');
+    const initialScore = scoreElement ? parseInt(scoreElement.innerText) : 0;
+
+    console.log('Initial Score:', initialScore);
+
+    // 依照評分數據改變星星顏色
+    stars.forEach((star, index) => {
+        const isStarActive = index < initialScore;
+        star.classList.toggle('active', isStarActive);
+        star.style.color = isStarActive ? 'gold' : 'black';
+    });
+    
+    stars.forEach(star => {
+        star.addEventListener('click', function () {
+            const clickedStar = this;
+            const clickedStarIndex = parseInt(clickedStar.getAttribute('data-star'));
+
+            // 依照點擊星星來改變顏色
+            stars.forEach((s, index) => {
+                if (index + 1 <= clickedStarIndex) {
+                    s.classList.add('active');
+                    s.style.color = 'gold';
+                    
+                } else {
+                    s.classList.remove('active');
+                    s.style.color = 'black';
+                }
+            });
+
+            const dramaName = this.parentElement.getAttribute('data-movie-name');
+            const selectedStars = document.querySelectorAll('#rating-stars i.active').length;
+
+            // 將評分數據發送到後端
+            fetch(`/api/v1/score/${dramaName}/${selectedStars}`, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    // 更新前端顯示的評分
+                    document.querySelector('#rating-stars p').innerText = `score:${data.score}`;
+                });
+        });
+    });
+});
+
