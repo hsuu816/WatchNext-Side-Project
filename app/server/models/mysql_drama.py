@@ -35,3 +35,30 @@ class DramaScore(db.Model):
         if drama_score:
             return drama_score.score
         return None
+    
+class DramaSimilarityContentBased(db.Model):
+    __tablename__ = 'drama_similarity_content_based'
+    # columns
+    id = db.Column(db.Integer, primary_key=True)
+    drama1_id = db.Column(db.Integer, nullable=False)
+    drama2_id = db.Column(db.Integer, nullable=False)
+    similarity = db.Column(db.Float, nullable=False)
+
+    def __init__(self, drama1_id, drama2_id, similarity):
+        self.drama1_id = drama1_id
+        self.drama2_id = drama2_id
+        self.similarity = similarity
+
+    
+class DramaSimilarityItemBased(db.Model):
+    __tablename__ = 'drama_similarity_item_based'
+    # columns
+    id = db.Column(db.Integer, primary_key=True)
+    drama1_id = db.Column(db.Integer, nullable=False)
+    drama2_id = db.Column(db.Integer, nullable=False)
+    similarity = db.Column(db.Float, nullable=False)
+
+    def __init__(self, drama1_id, drama2_id, similarity):
+        self.drama1_id = drama1_id
+        self.drama2_id = drama2_id
+        self.similarity = similarity

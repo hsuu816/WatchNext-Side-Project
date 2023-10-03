@@ -54,5 +54,45 @@
     {% endwith %}
     
     <h2>Welcome, {{ current_user.username }}!</h2>
+    <h3>已評分過戲劇</h3>
+    <div class="row g-0 text-center">
+        <div class="row">
+            {% for drama in dramas %}
+            <div class="col-md-3">
+                <div class="card drama_list" style="width: 18rem;">
+                    <a href="/api/v1/detail/{{ drama.name }}">
+                        <img src="{{ drama.image }}" alt="{{ drama.name }}" class="drama-img">
+                    </a>
+                    <div class="card-body">
+                        <h6 class="card-title">{{ drama.name }}</h6>
+                        <p class="card-text">{{ drama.eng_name }}</p>
+                        {% for category in drama.categories %}
+                            <span class="badge rounded-pill bg-primary text-white">{{ category }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <h3>推薦戲劇</h3>
+    <div class="row g-0 text-center" style="display: flex; flex-wrap: nowrap;">
+        <div class="row">
+            {% for drama in rec_drama %}
+            <div class="col-md-3">
+                <div class="card drama_list" style="width: 18rem;">
+                    <a href="/api/v1/detail/{{ drama.name }}">
+                        <img src="{{ drama.image }}" alt="{{ drama.name }}" class="drama-img">
+                    </a>
+                    <div class="card-body">
+                        <h6 class="card-title">{{ drama.name }}</h6>
+                        <p class="card-text">{{ drama.eng_name }}</p>
+                        {% for category in drama.categories %}
+                            <span class="badge rounded-pill bg-primary text-white">{{ category }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
 </body>
 </html>
