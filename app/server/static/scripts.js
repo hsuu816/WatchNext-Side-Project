@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function() {
             
                         // 生成html內容
                         dramaElement.innerHTML = `
-                            <div class="card drama_list" style="width: 18rem;">
+                            <div class="card drama_list" style="width: 16rem;">
                                 <a href="/api/v1/detail/${drama.name}">
                                     <img src="${drama.image}" alt="${drama.name}" class="drama-img">
                                 </a>

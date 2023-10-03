@@ -66,14 +66,14 @@ def find_user_rating_drama():
 @app.route('/', methods=['GET'])
 def get_drama():
     # 從mongodb中擷取資料
-    drama_data = drama_collection.find({}).limit(20)
+    drama_data = drama_collection.find({})
     hot_drama_data = comment_collection.aggregate(hot_drama())
     return render_template('index.html', dramas=drama_data, hot_drama=hot_drama_data)
 
 @app.route('/api/v1/category/<category>', methods=['GET'])
 def category_select(category):
     encoded_category = urllib.parse.unquote(category)
-    drama_data = list(drama_collection.find({"categories": encoded_category}, {"_id": 0}).limit(20))
+    drama_data = list(drama_collection.find({"categories": encoded_category}, {"_id": 0}))
     return jsonify({"dramas": drama_data})
 
 @app.route('/api/v1/search/<keyword>', methods=['GET'])

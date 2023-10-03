@@ -1,5 +1,5 @@
 .drama {
-    background-color: rgb(238, 239, 242);
+    /* background-color: rgb(238, 239, 242); */
     display: flex;
     align-items: flex-start;
     border-bottom: 1px solid #a39898; /* 添加底部邊框線 */
@@ -23,15 +23,8 @@
 
 .recommend-img {
     width: 100%; /* 設置圖片寬度為100% */
-    height: 400px; /* 設置圖片高度為您想要的固定高度 */
+    height: 400px;
     object-fit: cover; /* 保持圖片的寬高比並填滿圖片容器 */
-}
-
-.comment {
-    margin-left: 50px;
-    height: 500px; /* 設定固定高度 */
-    width: 400px; 
-    overflow-y: auto; /* 添加垂直滾動條 */
 }
 
 .drama_description {
@@ -45,7 +38,7 @@
 .drama_list {
     width: 250px;
     height: 500px;
-    margin: 30px;
+    margin: 20px;
 }
 
 .hot-drama {
@@ -70,10 +63,37 @@
     margin: 0px auto; 
     border: 1px solid #a2b9d4;
     padding: 20px;
-    max-width: 400px; /* 设置最大宽度，可以根据需要调整 */
+    max-width: 400px;
 }
 
 .flash {
     margin: 20px 20px 0px 20px;
     min-height: 50px;
+}
+
+.drama-container-detail {
+    margin: 20px;
+}
+
+.detail,
+.information,
+.drama_description,
+.comment {
+    background-color: rgb(238, 239, 242);
+    margin: 10px;
+    height: 550px;
+    overflow-y: auto; /* 添加垂直滾動條 */
+}
+
+#rating-stars i {
+    font-size: 24px; /* 星星大小 */
+}
+
+.rating-drama {
+    overflow-x: auto;
+}
+
+.rating-drama-list {
+    background-color: rgb(193, 216, 237);
+    margin-bottom: 20px;
 }
