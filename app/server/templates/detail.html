@@ -48,18 +48,18 @@
     </nav>
     <div class="drama-container-detail">
         {% for drama in dramas %}
-        <div class="drama">
-            <div class="detail">
+        <div class="drama row">
+            <div class="detail col p-3 text-center">
+                <h2>🍿{{ drama.name }}🍿</h2>
+                <p>{{ drama.eng_name }}</p>
                 <img src="{{ drama.image }}" alt="{{ drama.name }}" class="detail-img">
-                <h3>{{ drama.name }}</h2>
-                <p>{{ drama.eng_name }}</h3>
                 {% if current_user.is_authenticated %}
                 <div>
                     {% if score %}
                       <p style="display: inline;">你的評分：</p>
                       <p id="score" style="display: inline;">{{ score }}</p>
                     {% else %}
-                      <p>你的評分:尚未評分</p>
+                      <p>你的評分：尚未評分</p>
                     {% endif %}
                     <div id="rating-stars" data-movie-name="{{ drama.name }}">
                         <i class="fas fa-star" data-star="1"></i>
@@ -71,27 +71,38 @@
                 </div>
                 {% endif %}
             </div>
-            <div class="information">
-                <p>類別：{{ drama.categories | join(", ") }}</p>
-                {% for detail in drama.detail %}
-                    <p>{{ detail }}</p>
+            <div class="information col p-3">
+                <h4 class="text-center">詳細資訊</h4>
+                {% if drama.categories %}
+                  <p>🔎類別：{{ drama.categories | join(", ") }}</p>
+                {% else %}
+                  <p></p>
+                {% endif %}
+                {% for detail in drama.detail[1:] %}
+                    <p>🔎{{ detail }}</p>
                 {% endfor %}
             </div>
-        <div class="drama_description">
-            {% for drama in dramas %}
-                <p>{{ drama.description }}</p>
-            {% endfor %}
-        </div>
-            <div class="comment">
+            <div class="drama_description col p-3">
+                <h4 class="text-center">劇情簡介</h4>
+                {% for drama in dramas %}
+                    <p>{{ drama.description }}</p>
+                {% endfor %}
+            </div>
+            <div class="comment col p-3">
+                <h4 class="text-center">網友討論</h4>
+                {% if drama.comments %}
                 {% for article in drama.comments %}
                     <a href="{{ article.url }}">
-                        <h5>{{ article.title }}</h5>
+                        <h6>{{ article.title }}</h6>
                     </a>
                     <p>{{ article.release_time }}</p>
                     {% for comment in article.comments[:7] %}
                         <p>{{ comment }}</p>
                     {% endfor %}  
                 {% endfor %}
+                {% else %}
+                    <p class="text-center">~目前尚無評論~</p>
+                {% endif %}
             </div>
         </div>
         {% endfor %}
