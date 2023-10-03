@@ -1,18 +1,66 @@
-from flask import render_template, jsonify
+from flask import render_template, jsonify, redirect, url_for
 from flask_login import current_user
 from sqlalchemy.dialects.mysql import insert
+from sqlalchemy import not_
 import urllib.parse
 from server import app, db
 from server.models.mongodb import MongoDBConnector
-from server.models.mongo_aggregate import hot_drama, drama_detail, recommend_same_category_drama
+from server.models.mongo_aggregate import hot_drama, drama_detail
+from server.models.mysql_drama import Drama, DramaScore, DramaSimilarityContentBased, DramaSimilarityItemBased
 
-from server.models.mysql_drama import Drama, DramaScore
 
 # 連線mongodb
 mongo_connect_comment = MongoDBConnector('watchnext', 'comment')
 comment_collection = mongo_connect_comment.get_collection()
 mongo_connect_drama = MongoDBConnector('watchnext', 'drama')
 drama_collection = mongo_connect_drama.get_collection()
+
+
+# Content-based Recommendation
+def find_content_based_rec(drama_name):
+    drama = db.session.query(Drama).filter_by(name=drama_name).first()
+    if drama:
+        similar_dramas = (
+            db.session.query(Drama.name)
+            .join(DramaSimilarityContentBased, DramaSimilarityContentBased.drama2_id == Drama.id)
+            .filter(DramaSimilarityContentBased.drama1_id == drama.id)
+            .order_by(DramaSimilarityContentBased.similarity.desc())
+            .limit(4)
+            .all()
+        )
+        drama_list = [d[0] for d in similar_dramas]
+        return drama_list
+    else:
+        return []
+    
+# Item-based Collaborative
+def find_item_based_rec(drama_list_id):
+    similar_dramas = (
+        db.session.query(Drama.name)
+        .join(DramaSimilarityItemBased, DramaSimilarityItemBased.drama2_id == Drama.id)
+        .filter(
+            DramaSimilarityItemBased.drama1_id.in_(drama_list_id),
+            not_(DramaSimilarityItemBased.drama2_id.in_(drama_list_id))
+            )
+        .order_by(DramaSimilarityItemBased.similarity.desc())
+        .limit(20)
+        .all()
+    )
+    drama_list = [d[0] for d in similar_dramas]
+    return drama_list
+
+def find_user_rating_drama():
+    user_id = current_user.id
+    rating_drama = (
+        db.session.query(Drama.name, Drama.id)
+        .join(DramaScore, DramaScore.drama_id == Drama.id)
+        .filter(DramaScore.user_id == user_id)
+        .all()
+    )
+    drama_list_name = [d[0] for d in rating_drama]
+    drama_list_id = [d[1] for d in rating_drama]
+    return drama_list_name, drama_list_id
+
 
 
 @app.route('/', methods=['GET'])
@@ -34,16 +82,13 @@ def search(keyword):
     drama_data = list(drama_collection.find({"name": {"$regex":encoded_keyword}}, {"_id": 0}))
     return jsonify({"dramas": drama_data})
 
-
 @app.route('/api/v1/detail/<name>',  methods=['GET'])
 def get_drama_detail(name):
     encoded_name = urllib.parse.unquote(name)
     drama_detail_data = list(drama_collection.aggregate(drama_detail(encoded_name)))
-    if drama_detail_data[0]["categories"]:
-        category = drama_detail_data[0]["categories"][0] # 先只取一個類型標籤
-    else:
-        category = ""
-    recommend_drama = drama_collection.aggregate(recommend_same_category_drama(category, encoded_name))
+    rec_drama_list = find_content_based_rec(name)
+    recommend_drama = drama_collection.find({"name":{'$in': rec_drama_list}})
+
     score = None
     if current_user.is_authenticated:
         user_id = current_user.id
@@ -77,3 +122,14 @@ def score(drama_name, score):
             db.session.rollback()
 
     return jsonify({'score': score})
+
+@app.route('/member/recommendation', methods=['GET'])
+def get_rating_drama():
+    if current_user.is_authenticated:
+        drama_list_name, drama_list_id = find_user_rating_drama()
+        rating_drama_data = drama_collection.find({"name":{'$in': drama_list_name}})
+        rec_drama_data = find_item_based_rec(drama_list_id)
+        rec_drama = drama_collection.find({"name":{'$in': rec_drama_data}})
+        return render_template('member.html', dramas=rating_drama_data, rec_drama=rec_drama)
+    else:
+        return redirect(url_for('get_drama'))
