@@ -8,7 +8,6 @@ default_args = {
     'owner': 'Bonnie',
     'depends_on_past': False,
     'start_date': '2023-09-23 08:30:00',
-    'schedule_interval': '@once',
     'email': ['hsuu816@gmail.com'],
     'email_on_failure': True,
     'email_on_retry': False,
@@ -16,7 +15,7 @@ default_args = {
     'retry_delay': timedelta(minutes=1)
 }
 
-dag = DAG('imdb_yahoo_match', default_args=default_args)
+dag = DAG('imdb_yahoo_match', default_args=default_args, schedule_interval='@once',)
 
 t1 = EmptyOperator(
     task_id = 'start',

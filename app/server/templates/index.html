@@ -15,17 +15,32 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ml-auto">
+              <form id="search" class="d-flex" role="search">
+                <input id="search-input" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button id="search-button" class="btn btn-sm btn-outline-secondary text-white " type="button">Search</button>
+              </form>
               <li class="nav-item">
                 <a class="nav-link active text-white" aria-current="page" href="/">Home</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link text-white" href="#">Dashboard</a>
               </li>
+              {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                  <a class="nav-link text-white" href="{{url_for('get_rating_drama')}}">會員專區</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link text-white" href="{{url_for('logout')}}">登出</a>
+                </li>
+              {% else %}
+                <li class="nav-item">
+                  <a class="nav-link text-white" href="{{url_for('login')}}">登入</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link text-white" href="{{url_for('signup')}}">註冊</a>
+                </li>
+              {% endif %}
             </ul>
-            <!-- <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-sm btn-outline-secondary text-white" type="button">Search</button>
-            </form> -->
           </div>
         </div>
       </nav>
