@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(response => response.json())
                 .then(data => {
                     // 更新前端顯示的評分
-                    document.querySelector('#rating-stars p').innerText = `score:${data.score}`;
+                    document.querySelector('#score').innerText = `${data.score}`;
                 });
         });
     });

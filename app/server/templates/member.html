@@ -59,16 +59,13 @@
         <div class="row flex-nowrap rating-drama">
             {% for drama in dramas %}
             <div class="col-md-2">
-                <div class="card drama_list" style="width: 10rem; height: 400px;">
+                <div class="card drama_list" style="width: 10rem; height: 350px;">
                     <a href="/api/v1/detail/{{ drama.name }}">
                         <img src="{{ drama.image }}" alt="{{ drama.name }}" style="width: 150px; height: 250px;">
                     </a>
                     <div class="card-body">
                         <p class="card-title">{{ drama.name }}</p>
-                        <p class="card-text">{{ drama.eng_name }}</p>
-                        {% for category in drama.categories %}
-                            <span class="badge rounded-pill bg-primary text-white">{{ category }}</span>
-                        {% endfor %}
+                        <p class="card-text">評分：{{ drama.drama_score }}</p>
                     </div>
                 </div>
             </div>
