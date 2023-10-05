@@ -52,14 +52,15 @@ def find_item_based_rec(drama_list_id):
 def find_user_rating_drama():
     user_id = current_user.id
     rating_drama = (
-        db.session.query(Drama.name, Drama.id)
+        db.session.query(Drama.name, Drama.id, DramaScore.score)
         .join(DramaScore, DramaScore.drama_id == Drama.id)
         .filter(DramaScore.user_id == user_id)
         .all()
     )
     drama_list_name = [d[0] for d in rating_drama]
     drama_list_id = [d[1] for d in rating_drama]
-    return drama_list_name, drama_list_id
+    drama_score = {d[0]: d[2] for d in rating_drama}
+    return drama_list_name, drama_list_id, drama_score
 
 
 
@@ -126,8 +127,10 @@ def score(drama_name, score):
 @app.route('/member/recommendation', methods=['GET'])
 def get_rating_drama():
     if current_user.is_authenticated:
-        drama_list_name, drama_list_id = find_user_rating_drama()
-        rating_drama_data = drama_collection.find({"name":{'$in': drama_list_name}})
+        drama_list_name, drama_list_id, drama_score = find_user_rating_drama()
+        rating_drama_data = list(drama_collection.find({"name":{'$in': drama_list_name}}))
+        for drama in rating_drama_data:
+            drama['drama_score'] = drama_score.get(drama['name'], 0)
         rec_drama_data = find_item_based_rec(drama_list_id)
         rec_drama = drama_collection.find({"name":{'$in': rec_drama_data}})
         return render_template('member.html', dramas=rating_drama_data, rec_drama=rec_drama)
