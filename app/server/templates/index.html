@@ -9,7 +9,7 @@
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #00416A;" >
         <div class="container-fluid">
-          <h1 class="text-white">Watch Next</h1>
+          <h1 class="text-white", style="margin-bottom: 0px">Watch Next</h1>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -20,24 +20,24 @@
                 <button id="search-button" class="btn btn-sm btn-outline-secondary text-white " type="button">Search</button>
               </form>
               <li class="nav-item">
-                <a class="nav-link active text-white" aria-current="page" href="/">Home</a>
+                <a class="nav-link active text-white" aria-current="page" href="/">首頁</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="#">Dashboard</a>
+                <a class="nav-link text-white" href="/dashboard/">戲劇討論趨勢</a>
               </li>
               {% if current_user.is_authenticated %}
                 <li class="nav-item">
-                  <a class="nav-link text-white" href="{{url_for('get_rating_drama')}}">會員專區</a>
+                  <a class="nav-link text-white" href="/member/recommendation">會員專區</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link text-white" href="{{url_for('logout')}}">登出</a>
+                  <a class="nav-link text-white" href="/logout">登出</a>
                 </li>
               {% else %}
                 <li class="nav-item">
-                  <a class="nav-link text-white" href="{{url_for('login')}}">登入</a>
+                  <a class="nav-link text-white" href="/login">登入</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link text-white" href="{{url_for('signup')}}">註冊</a>
+                  <a class="nav-link text-white" href="/signup">註冊</a>
                 </li>
               {% endif %}
             </ul>

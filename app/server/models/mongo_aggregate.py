@@ -30,8 +30,16 @@ def drama_detail(name):
     return drama_comment
 
 
-def hot_drama():
+def hot_drama(limit, release_time):
     hot_drama = [
+        {
+            "$match": {
+                "release_time":{
+                    "$gt": release_time
+                    }
+                }
+  
+        },
         {
             "$group": {
                 "_id": "$drama_name",
@@ -45,7 +53,7 @@ def hot_drama():
             "$skip":1
         },
         {
-            "$limit": 10
+            "$limit": limit
         },
         {
             "$lookup": {
@@ -60,8 +68,9 @@ def hot_drama():
               "_id": 0,
               "count": 1,
               "detail": {
-                "name":1,
-                "image": 1
+                "name": 1,
+                "image": 1,
+                "categories": 1
                 }
             }
         }

@@ -67,8 +67,8 @@ def find_user_rating_drama():
 @app.route('/', methods=['GET'])
 def get_drama():
     # 從mongodb中擷取資料
-    drama_data = drama_collection.find({})
-    hot_drama_data = comment_collection.aggregate(hot_drama())
+    drama_data = drama_collection.find({}).limit(20)
+    hot_drama_data = comment_collection.aggregate(hot_drama(10, "2023-01-01 00:00:00"))
     return render_template('index.html', dramas=drama_data, hot_drama=hot_drama_data)
 
 @app.route('/api/v1/category/<category>', methods=['GET'])

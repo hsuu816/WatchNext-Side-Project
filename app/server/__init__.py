@@ -25,4 +25,4 @@ def server_error(error):
 #         return e
 #     return "Internal Server Error", 500
 
-from server.controllers import drama_controller, user_controller
+from server.controllers import drama_controller, user_controller, dashboard_controller

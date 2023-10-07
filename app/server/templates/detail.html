@@ -17,24 +17,24 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ml-auto">
               <li class="nav-item">
-                <a class="nav-link active text-white" aria-current="page" href="/">Home</a>
+                <a class="nav-link active text-white" aria-current="page" href="/">首頁</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="#">Dashboard</a>
+                <a class="nav-link text-white" href="/dashboard/">戲劇討論趨勢</a>
               </li>
               {% if current_user.is_authenticated %}
                 <li class="nav-item">
-                  <a class="nav-link text-white" href="{{url_for('get_rating_drama')}}">會員專區</a>
+                  <a class="nav-link text-white" href="/member/recommendation">會員專區</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link text-white" href="{{url_for('logout')}}">登出</a>
+                  <a class="nav-link text-white" href="/logout">登出</a>
                 </li>
               {% else %}
                 <li class="nav-item">
-                  <a class="nav-link text-white" href="{{url_for('login')}}">登入</a>
+                  <a class="nav-link text-white" href="/login">登入</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link text-white" href="{{url_for('signup')}}">註冊</a>
+                  <a class="nav-link text-white" href="/signup">註冊</a>
                 </li>
               {% endif %}
           </ul>
