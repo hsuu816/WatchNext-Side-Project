@@ -55,13 +55,13 @@
                 <img src="{{ drama.image }}" alt="{{ drama.name }}" class="detail-img">
                 {% if current_user.is_authenticated %}
                 <div>
-                    {% if score %}
+                    {% if rating %}
                       <p style="display: inline;">你的評分：</p>
-                      <p id="score" style="display: inline;">{{ score }}</p>
+                      <p id="rating" style="display: inline;">{{ rating }}</p>
                     {% else %}
                       <p>你的評分：尚未評分</p>
                     {% endif %}
-                    <div id="rating-stars" data-movie-name="{{ drama.name }}">
+                    <div id="rating-stars" data-movie-id="{{ drama._id }}">
                         <i class="fas fa-star" data-star="1"></i>
                         <i class="fas fa-star" data-star="2"></i>
                         <i class="fas fa-star" data-star="3"></i>
@@ -112,12 +112,12 @@
         {% for drama in recommend_drama %}
             <div class="col-md-3"> <!-- 每個卡片佔用4分之1的寬度-->
                 <div class="card" style="width: 18rem;">
-                    <a href="/api/v1/detail/{{ drama.name }}">
-                        <img src="{{ drama.image }}" class="card-img-top recommend-img" alt="{{ drama.name }}">
+                    <a href="/api/v1/detail/{{ drama.detail[0]._id }}">
+                        <img src="{{ drama.detail[0].image }}" class="card-img-top recommend-img" alt="{{ drama.detail[0].name }}">
                     </a>
                     <div class="card-body">
-                        <h5 class="card-title">{{ drama.name }}</h5>
-                        <p class="card-text">{{ drama.comment_count }}篇討論文</p>
+                        <h5 class="card-title">{{ drama.detail[0].name }}</h5>
+                        <!-- <p class="card-text">{{ drama.comment_count }}篇討論文</p> -->
                     </div>
                 </div>
             </div>
