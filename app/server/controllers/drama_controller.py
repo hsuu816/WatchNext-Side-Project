@@ -22,53 +22,6 @@ content_based_collection = mongo_connect_content_based.get_collection()
 mongo_connect_user_based = MongoDBConnector('watchnext', 'drama_similarity_user_based')
 user_based_collection = mongo_connect_user_based.get_collection()
 
-# Content-based Recommendation
-def find_content_based_rec(drama_name):
-    drama = db.session.query(Drama).filter_by(name=drama_name).first()
-    if drama:
-        similar_dramas = (
-            db.session.query(Drama.name)
-            .join(DramaSimilarityContentBased, DramaSimilarityContentBased.drama2_id == Drama.id)
-            .filter(DramaSimilarityContentBased.drama1_id == drama.id)
-            .order_by(DramaSimilarityContentBased.similarity.desc())
-            .limit(4)
-            .all()
-        )
-        drama_list = [d[0] for d in similar_dramas]
-        return drama_list
-    else:
-        return []
-    
-# Item-based Collaborative
-def find_item_based_rec(drama_list_id):
-    similar_dramas = (
-        db.session.query(Drama.name)
-        .join(DramaSimilarityItemBased, DramaSimilarityItemBased.drama2_id == Drama.id)
-        .filter(
-            DramaSimilarityItemBased.drama1_id.in_(drama_list_id),
-            not_(DramaSimilarityItemBased.drama2_id.in_(drama_list_id))
-            )
-        .order_by(DramaSimilarityItemBased.similarity.desc())
-        .limit(20)
-        .all()
-    )
-    drama_list = [d[0] for d in similar_dramas]
-    return drama_list
-
-def find_user_rating_drama():
-    user_id = current_user.id
-    rating_drama = (
-        db.session.query(Drama.name, Drama.id, DramaScore.score)
-        .join(DramaScore, DramaScore.drama_id == Drama.id)
-        .filter(DramaScore.user_id == user_id)
-        .all()
-    )
-    drama_list_name = [d[0] for d in rating_drama]
-    drama_list_id = [d[1] for d in rating_drama]
-    drama_score = {d[0]: d[2] for d in rating_drama}
-    return drama_list_name, drama_list_id, drama_score
-
-
 
 @app.route('/', methods=['GET'])
 def get_drama():
