@@ -71,7 +71,7 @@
                 {% for drama in dramas %}
                 <div class="col-md-4">
                     <div class="card drama_list" style="width: 18rem;">
-                        <a href="/api/v1/detail/{{ drama.name }}">
+                        <a href="/api/v1/detail/{{ drama._id }}">
                             <img src="{{ drama.image }}" alt="{{ drama.name }}" class="drama-img">
                         </a>
                         <div class="card-body">
@@ -90,7 +90,7 @@
             <div class="hot-drama">
                 <h3>Top 10</h3>
                 {% for hot in hot_drama %}
-                    <a href="/api/v1/detail/{{ hot.detail[0].name }}">
+                    <a href="/api/v1/detail/{{ hot.detail[0]._id }}">
                         <img src="{{ hot.detail[0].image }}" alt="{{ hot.detail[0].name }}" class="hot-drama-img">
                     </a>
                     <h6>{{ hot.detail[0].name }}</h6>
