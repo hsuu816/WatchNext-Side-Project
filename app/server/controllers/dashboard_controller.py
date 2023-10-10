@@ -1,6 +1,7 @@
 from server import app
 from dash import Dash, html, dcc
 from dash.dependencies import Input, Output
+import dash_bootstrap_components as dbc
 import pandas as pd
 import plotly.express as px
 from datetime import datetime, timedelta
@@ -10,7 +11,9 @@ from wordcloud import WordCloud
 from io import BytesIO
 import base64
 
-dash = Dash(server=app, routes_pathname_prefix="/dashboard/")
+external_stylesheets = ['https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css', '/static/style.css']
+
+dash = Dash(server=app, routes_pathname_prefix="/dashboard/", external_stylesheets=external_stylesheets)
 dash.config.suppress_callback_exceptions = True
 
 # 連線mongodb
@@ -19,28 +22,64 @@ comment_collection = mongo_connect_comment.get_collection()
 mongo_connect_drama = MongoDBConnector('watchnext', 'drama')
 drama_collection = mongo_connect_drama.get_collection()
 
-dash.layout = html.Div([
-    html.H1("戲劇討論趨勢", style={'text-align': 'center'}),
-    html.Div(
-        dcc.RadioItems(
-            id='time-range-selector',
-            options=[
-                {'label': '七天', 'value': '7d'},
-                {'label': '一個月', 'value': '1m'},
-                {'label': '三個月', 'value': '3m'},
-                {'label': '半年', 'value': '6m'},
-            ],
-            value='7d',  # 預設七天
-            labelStyle={'display': 'inline-block', 'margin-right': '10px'}
-        ),
-        style={'text-align': 'center', 'margin': '20px'}
-    ),
+dash.index_string = '''
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>{%title%}</title>
+            {%css%}
+        </head>
+        <body>
+            <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #00416A;" >
+                <div class="container-fluid">
+                    <h1 class="text-white", style="margin-bottom: 0px">Watch Next</h1>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ml-auto">
+                            <li class="nav-item">
+                                <a class="nav-link active text-white" aria-current="page" href="/">回首頁</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            {%app_entry%}
+            <footer>
+                {%config%}
+                {%scripts%}
+                {%renderer%}
+            </footer>
+        </body>
+    </html>
+    '''
+
+dash.layout = dbc.Container([
     html.Div([
-        dcc.Graph(id='bar-chart', style={'width': '50%', 'height': '50%', 'margin-right': 'auto', 'margin-left': '0px', 'display': 'block'}),
-        dcc.Graph(id='pie-chart',style={'width': '50%', 'height': '50%', 'margin-right': '0px', 'margin-left': 'auto', 'display': 'block'}),
-    ], style={'display': 'flex', 'margin-bottom': '40px'}),
-    html.Img(id='wordcloud-image', style={'width': '80%', 'height': '80%', 'margin': 'auto', 'display': 'block'})
-])
+        html.H1("戲劇討論趨勢", style={'text-align': 'center'}),
+        html.Div(
+            dcc.RadioItems(
+                id='time-range-selector',
+                options=[
+                    {'label': '七天', 'value': '7d'},
+                    {'label': '一個月', 'value': '1m'},
+                    {'label': '三個月', 'value': '3m'},
+                    {'label': '半年', 'value': '6m'},
+                ],
+                value='7d',  # 預設七天
+                labelStyle={'display': 'inline-block', 'margin-right': '10px'}
+            ),
+            style={'text-align': 'center', 'margin': '20px'}
+        ),
+        dbc.Spinner(
+            html.Div([
+                dcc.Graph(id='bar-chart', style={'width': '50%', 'height': '50%', 'margin-right': 'auto', 'margin-left': '0px', 'display': 'block'}),
+                dcc.Graph(id='pie-chart',style={'width': '50%', 'height': '50%', 'margin-right': '0px', 'margin-left': 'auto', 'display': 'block'}),
+            ], style={'display': 'flex', 'margin-bottom': '40px'})
+        ),
+        dbc.Spinner(
+            html.Img(id='wordcloud-image', style={'width': '80%', 'height': '80%', 'margin': 'auto', 'display': 'block'})
+        )
+    ])
+], fluid=True)
 
 @dash.callback(
     [Output('bar-chart', 'figure'),
