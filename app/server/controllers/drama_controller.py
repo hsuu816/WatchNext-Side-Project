@@ -33,7 +33,7 @@ def get_drama():
     total = drama_collection.count_documents({})
     pagination = Pagination(page=page, total=total, per_page=30)
     drama_data = drama_collection.find({}).skip(offset_value).limit(limit_value)
-    hot_drama_data = list(comment_collection.aggregate(hot_drama(10, "2023-01-01 00:00:00")))
+    hot_drama_data = list(comment_collection.aggregate(hot_drama(10)))
     return render_template('index.html', dramas=drama_data, hot_drama=hot_drama_data, pagination=pagination)
 
 @app.route('/api/v1/category/<category>', methods=['GET'])
