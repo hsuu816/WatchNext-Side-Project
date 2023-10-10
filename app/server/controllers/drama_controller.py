@@ -1,5 +1,6 @@
-from flask import render_template, jsonify, redirect, url_for
+from flask import render_template, jsonify, redirect, url_for, request
 from flask_login import current_user
+from flask_paginate import Pagination, get_page_parameter
 import urllib.parse
 from bson import ObjectId, json_util
 from datetime import datetime, timedelta
@@ -70,12 +71,17 @@ def find_user_rating_drama():
 
 
 
-@app.route('/', methods=['GET'])
+@app.route('/')
 def get_drama():
     # 從mongodb中擷取資料
-    drama_data = drama_collection.find({}).limit(100)
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    limit_value = 30
+    offset_value=(30 * int(page)-30)
+    total = drama_collection.count_documents({})
+    pagination = Pagination(page=page, total=total, per_page=30)
+    drama_data = drama_collection.find({}).skip(offset_value).limit(limit_value)
     hot_drama_data = list(comment_collection.aggregate(hot_drama(10, "2023-01-01 00:00:00")))
-    return render_template('index.html', dramas=drama_data, hot_drama=hot_drama_data)
+    return render_template('index.html', dramas=drama_data, hot_drama=hot_drama_data, pagination=pagination)
 
 @app.route('/api/v1/category/<category>', methods=['GET'])
 def category_select(category):

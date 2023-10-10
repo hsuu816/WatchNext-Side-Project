@@ -1,3 +1,9 @@
+// 去掉分頁按鈕
+function deletePagination() {
+    var paginationContainer = document.querySelector(".pagination");
+    paginationContainer.innerHTML = "";
+}
+
 // 搜尋功能篩選
 function keywordSearch() {
     var keyword = document.getElementById('search-input').value;
@@ -40,6 +46,7 @@ function keywordSearch() {
                 // 插入到html容器中
                 dramaContainer.appendChild(dramaElement);
             });
+            deletePagination();
         }
     };
     xhr.send();
@@ -54,7 +61,6 @@ document.addEventListener('DOMContentLoaded', function () {
         keywordSearch();
     });
 });
-
 
 // 類型按鈕篩選
 document.addEventListener("DOMContentLoaded", function() {
@@ -103,6 +109,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         // 插入到html容器中
                         dramaContainer.appendChild(dramaElement);
                     });
+                    deletePagination();
                 }
             };
             xhr.send();
