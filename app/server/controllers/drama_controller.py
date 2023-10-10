@@ -3,10 +3,9 @@ from flask_login import current_user
 import urllib.parse
 from bson import ObjectId, json_util
 from datetime import datetime, timedelta
-from server import app, db
+from server import app
 from server.models.mongodb import MongoDBConnector
 from server.models.mongo_aggregate import hot_drama, drama_detail, content_based_rec_drama, user_rating_drama, similarity_user_like
-from server.models.mysql_drama import Drama, DramaScore, DramaSimilarityContentBased, DramaSimilarityItemBased
 
 
 # 連線mongodb
