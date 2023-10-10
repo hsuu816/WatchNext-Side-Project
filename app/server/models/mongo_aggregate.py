@@ -27,16 +27,8 @@ def drama_detail(id):
     return drama_comment
 
 
-def hot_drama(limit, release_time):
+def hot_drama(limit):
     hot_drama = [
-        {
-            "$match": {
-                "release_time":{
-                    "$gt": release_time
-                    }
-                }
-  
-        },
         {
             "$group": {
                 "_id": "$drama_name",
@@ -174,6 +166,7 @@ def similarity_user_like(user_id):
             "rating": 1,
             "drama_data": {"_id":1, "name": 1, "image": 1, "categories": 1}
             }
-        }
+        },
+        {"$limit": 20}
         ]
     return similarity_user_like
