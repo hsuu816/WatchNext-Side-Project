@@ -91,6 +91,8 @@
 
 .rating-drama {
     overflow-x: auto;
+    width: 100%;
+    height: 450px;
 }
 
 .rating-drama-list {
