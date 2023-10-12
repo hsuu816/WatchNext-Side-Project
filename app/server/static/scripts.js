@@ -15,7 +15,7 @@ function keywordSearch() {
             var responseData = JSON.parse(xhr.responseText);
             
             // 找到用於顯示戲劇資訊的容器元素
-            var dramaContainer = document.querySelector(".row");
+            var dramaContainer = document.querySelector(".drama-display");
     
             // 清空容器內的現有內容
             dramaContainer.innerHTML = "";
@@ -23,12 +23,12 @@ function keywordSearch() {
             // 遍歷responseData中的資料並插入到容器中
             responseData.dramas.forEach(function(drama) {
                 var dramaElement = document.createElement("div");
-                dramaElement.className = "col-md-3"; // 確保每個卡片佔用相同的列寬
+                dramaElement.className = "col-lg-4 col-md-6 col-sm-12"; // 確保每個卡片佔用相同的列寬
     
                 // 把category一個個取出放入html
                 const categoriesHTML = drama.categories.map(category => `
                     <span class="badge rounded-pill bg-primary text-white">${category}</span>`).join('');
-    
+                
                 // 生成html內容
                 dramaElement.innerHTML = `
                     <div class="card drama_list" style="width: 18rem;">
@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     var responseData = JSON.parse(xhr.responseText);
             
                     // 找到用於顯示戲劇資訊的容器元素
-                    var dramaContainer = document.querySelector(".row");
+                    var dramaContainer = document.querySelector(".drama-display");
             
                     // 清空容器內的現有內容
                     dramaContainer.innerHTML = "";
@@ -87,14 +87,14 @@ document.addEventListener("DOMContentLoaded", function() {
                     // 遍歷responseData中的資料並插入到容器中
                     responseData.dramas.forEach(function(drama) {
                         var dramaElement = document.createElement("div");
-                        dramaElement.className = "col-md-3"; // 確保每個卡片佔用相同的列寬
+                        dramaElement.className = "col-lg-4 col-md-6 col-sm-12"; // 確保每個卡片佔用相同的列寬
             
                         // 把category一個個取出放入html
                         const categoriesHTML = drama.categories.map(category => `
                             <span class="badge rounded-pill bg-primary text-white">${category}</span>`).join('');
                         // 生成html內容
                         dramaElement.innerHTML = `
-                            <div class="card drama_list" style="width: 16rem;">
+                            <div class="card drama_list" style="width: 18rem;">
                                 <a href="/api/v1/detail/${drama._id.$oid}">
                                     <img src="${drama.image}" alt="${drama.name}" class="drama-img">
                                 </a>
