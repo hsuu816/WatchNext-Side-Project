@@ -19,6 +19,7 @@ user_rating_collection = mongo_db.user_rating
 def fake_data(user_ids, categories):
     dramas = drama_collection.find({}).limit(1000)
     drama_id_list = [drama['_id'] for drama in dramas]
+    categories_set = set(categories)
 
     # 插入虛構評分資料
     for user_id in user_ids:
@@ -31,10 +32,11 @@ def fake_data(user_ids, categories):
         for drama_id in selected_drama_ids:
             drama = drama_collection.find_one({"_id": drama_id})
             if drama['categories']:
-                drama_category = drama['categories'][0]
+                drama_category = drama['categories']
+                drama_category_set = set(drama_category)
             else:
                 drama_category = 'null'
-            if drama_category in categories:
+            if drama_category_set.intersection(categories_set):
                 min_rating, max_rating = 4, 5
             else:
                 min_rating, max_rating = 1, 3
@@ -58,3 +60,9 @@ fake_data(['6523ba55ab99ecb70f8ec836', '6523ba5fab99ecb70f8ec837'], ['愛情','�
 fake_data(['6523ba68ab99ecb70f8ec838', '6523ba71ab99ecb70f8ec839'], ['動畫'])
 fake_data(['6523ba97ab99ecb70f8ec83a', '6523baa3ab99ecb70f8ec83b'], ['冒險', '武俠'])
 fake_data(['6523baadab99ecb70f8ec83c', '6523babcab99ecb70f8ec83d'], ['科幻'])
+fake_data(['6527945092cdc554b58eb129', '6527945d92cdc554b58eb12a'], ['喜劇', '愛情'])
+fake_data(['6527946992cdc554b58eb12b', '6527947892cdc554b58eb12c'], ['劇情'])
+fake_data(['6527948392cdc554b58eb12d', '6527948d92cdc554b58eb12e'], ['奇幻'])
+fake_data(['6527949e92cdc554b58eb12f', '652794ac92cdc554b58eb130'], ['勵志', '紀錄片'])
+fake_data(['652794be92cdc554b58eb131', '652794cf92cdc554b58eb132'], ['動畫'])
+fake_data(['652794dc92cdc554b58eb133'], ['恐怖'])
