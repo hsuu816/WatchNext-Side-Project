@@ -148,11 +148,12 @@ def user_rating_drama(user_id):
         ]
     return user_rating_drama
 
-def similarity_user_like(user_id):
+def similarity_user_like(user_id, already_rating_drama):
     similarity_user_like = [
         {"$match": {
             "user_id": user_id, 
-            "rating": {"$in": [4, 5]}
+            "rating": {"$in": [4, 5]},
+            "drama_id": {"$nin": already_rating_drama}
             }
         },
         {"$lookup": {
