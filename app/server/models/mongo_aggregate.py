@@ -172,3 +172,29 @@ def similarity_user_like(user_id, already_rating_drama):
         {"$limit": 20}
         ]
     return similarity_user_like
+
+def member_content_based_rec_drama(id_list, limit):
+    member_content_based_rec_drama = [
+        {"$match": {"drama1_id": {"$in": id_list}}},
+        {"$sort": { "similarity": -1 }},
+        {"$limit": limit},
+        {"$lookup": {
+            "from": "drama",
+            "localField": "drama2_id",
+            "foreignField": "_id",
+            "as": "drama_data"
+        }},
+        {"$unwind": "$drama_data"},
+        {"$group": {
+            "_id": "$drama2_id",
+            "similarity": {"$first": "$similarity"},
+            "drama1_id": {"$first": "$drama1_id"},
+            "drama2_id": {"$first": "$drama2_id"},
+            "drama_data": {"$first": "$drama_data"}
+        }},
+        {"$project": {
+            "_id": 0,
+            "drama_data": {"_id": 1, "name": 1, "image": 1, "categories": 1}
+        }}
+    ]
+    return member_content_based_rec_drama
