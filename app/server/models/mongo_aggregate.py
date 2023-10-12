@@ -1,8 +1,10 @@
-def drama_detail(name):
+from bson import ObjectId
+
+def drama_detail(id):
     drama_comment = [
         {
             "$match": {
-                "name": name  # 只匹配指定的 name
+                "_id": ObjectId(id)
             }
         },
         {
@@ -20,17 +22,12 @@ def drama_detail(name):
                     }
                 ]
             }
-        },
-        {
-            "$project":{
-                "_id": 0
-            }
         }
     ]
     return drama_comment
 
 
-def hot_drama():
+def hot_drama(limit):
     hot_drama = [
         {
             "$group": {
@@ -45,7 +42,7 @@ def hot_drama():
             "$skip":1
         },
         {
-            "$limit": 10
+            "$limit": limit
         },
         {
             "$lookup": {
@@ -60,8 +57,10 @@ def hot_drama():
               "_id": 0,
               "count": 1,
               "detail": {
-                "name":1,
-                "image": 1
+                "_id": 1,
+                "name": 1,
+                "image": 1,
+                "categories": 1
                 }
             }
         }
@@ -102,3 +101,72 @@ def recommend_same_category_drama(category, name):
         }
 ]
     return recommend_same_category_drama
+
+def content_based_rec_drama(id):
+    content_based_rec_drama = [
+        {"$match": {"drama1_id": ObjectId(id)}},
+        {"$sort": { "similarity": -1 }},
+        {"$limit": 4},
+        {"$lookup": {
+            "from": "drama",
+            "localField": "drama2_id",
+            "foreignField": "_id",
+            "as": "detail"
+            }
+        },
+        {"$project": {
+            "_id": 0,
+            "detail": {
+                "_id": 1,
+                "name": 1,
+                "image": 1
+                }
+            }
+        }
+    ]
+    return content_based_rec_drama
+
+def user_rating_drama(user_id):
+    user_rating_drama = [
+        {"$match": {"user_id": user_id}},
+        {"$lookup": {
+            "from": "drama",
+            "localField": "drama_id",
+            "foreignField": "_id",
+            "as": "drama_data"
+            }
+        },
+        {"$project": {
+            "user_id":1,
+            "drama_id": 1,
+            "rating": 1,
+            "create_time": 1,
+            "drama_data":{"name":1,"image":1}
+            }
+        },
+        {"$sort": {"create_time": -1}}
+        ]
+    return user_rating_drama
+
+def similarity_user_like(user_id):
+    similarity_user_like = [
+        {"$match": {
+            "user_id": user_id, 
+            "rating": {"$in": [4, 5]}
+            }
+        },
+        {"$lookup": {
+            "from": "drama",
+            "localField": "drama_id",
+            "foreignField": "_id",
+            "as": "drama_data"
+            }
+        },
+        {"$project": {
+            "rating": 1,
+            "drama_data": {"_id":1, "name": 1, "image": 1, "categories": 1}
+            }
+        },
+        {"$limit": 20}
+        ]
+    return similarity_user_like

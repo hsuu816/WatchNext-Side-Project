@@ -1,100 +1,87 @@
 <!DOCTYPE html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Member</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="/static/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Member</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
+  <div class="fixed-top">
     <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #00416A;" >
-        <div class="container-fluid">
-          <h1 class="text-white">Watch Next</h1>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ml-auto">
+      <div class="container-fluid">
+        <h1 class="text-white">Watch Next</h1>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0 ml-auto">
+            <li class="nav-item">
+              <a class="nav-link active text-white" aria-current="page" href="/">首頁</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/dashboard/">戲劇討論趨勢</a>
+            </li>
+            {% if current_user.is_authenticated %}
               <li class="nav-item">
-                <a class="nav-link active text-white" aria-current="page" href="/">Home</a>
+                <a class="nav-link text-white" href="/logout">登出</a>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link text-white" href="/login">登入</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="#">Dashboard</a>
+                <a class="nav-link text-white" href="/signup">註冊</a>
               </li>
-              {% if current_user.is_authenticated %}
-                <li class="nav-item">
-                  <a class="nav-link text-white" href="{{url_for('get_rating_drama')}}">會員專區</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link text-white" href="{{url_for('logout')}}">登出</a>
-                </li>
-              {% else %}
-                <li class="nav-item">
-                  <a class="nav-link text-white" href="{{url_for('login')}}">登入</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link text-white" href="{{url_for('signup')}}">註冊</a>
-                </li>
-              {% endif %}
-            </ul>
-            <!-- <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-sm btn-outline-secondary text-white" type="button">Search</button>
-            </form> -->
-          </div>
+            {% endif %}
+          </ul>
         </div>
-      </nav>
-    <!-- flash-->
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for message in messages %}
-            <p>{{ message }}</p>
-        {% endfor %}
-    {% endif %}
-    {% endwith %}
-    
+      </div>
+    </nav>
+  </div>    
+  <div style="margin-top: 80px">
     <h2 class="text-center">Welcome, {{ current_user.username }}!</h2>
     <h3 class="text-center">已評分過戲劇</h3>
     <div class="row g-0 text-center rating-drama-list">
-        <div class="row flex-nowrap rating-drama">
-            {% for drama in dramas %}
-            <div class="col-md-2">
-                <div class="card drama_list" style="width: 10rem; height: 400px;">
-                    <a href="/api/v1/detail/{{ drama.name }}">
-                        <img src="{{ drama.image }}" alt="{{ drama.name }}" style="width: 150px; height: 250px;">
-                    </a>
-                    <div class="card-body">
-                        <p class="card-title">{{ drama.name }}</p>
-                        <p class="card-text">{{ drama.eng_name }}</p>
-                        {% for category in drama.categories %}
-                            <span class="badge rounded-pill bg-primary text-white">{{ category }}</span>
-                        {% endfor %}
-                    </div>
-                </div>
+      <div class="row flex-nowrap rating-drama">
+        {% for drama in dramas %}
+        <div class="col-md-2">
+          <div class="card drama_list" style="width: 10rem; height: 350px;">
+            <a href="/api/v1/detail/{{ drama.drama_id }}">
+              <img src="{{ drama.drama_data[0].image }}" alt="{{ drama.drama_data[0].name }}" style="width: 150px; height: 250px;">
+            </a>
+            <div class="card-body">
+              <p class="card-title">{{ drama.drama_data[0].name }}</p>
+              <p class="card-text">評分：{{ drama.rating }}</p>
             </div>
-            {% endfor %}
+          </div>
         </div>
+        {% endfor %}
+      </div>
     </div>
+  </div>
     <h3 class="text-center">推薦戲劇</h3>
     <div class="row g-0 text-center" style="display: flex; flex-wrap: nowrap;">
-        <div class="row">
-            {% for drama in rec_drama %}
-            <div class="col-md-3">
-                <div class="card drama_list" style="width: 18rem;">
-                    <a href="/api/v1/detail/{{ drama.name }}">
-                        <img src="{{ drama.image }}" alt="{{ drama.name }}" class="drama-img">
-                    </a>
-                    <div class="card-body">
-                        <h6 class="card-title">{{ drama.name }}</h6>
-                        <p class="card-text">{{ drama.eng_name }}</p>
-                        {% for category in drama.categories %}
-                            <span class="badge rounded-pill bg-primary text-white">{{ category }}</span>
-                        {% endfor %}
-                    </div>
-                </div>
+      <div class="row">
+        {% if rec_drama %}
+        {% for drama in rec_drama %}
+        <div class="col-md-3">
+          <div class="card drama_list" style="width: 18rem;">
+            <a href="/api/v1/detail/{{ drama.drama_data[0]._id }}">
+              <img src="{{ drama.drama_data[0].image }}" alt="{{ drama.drama_data[0].name }}" class="drama-img">
+            </a>
+            <div class="card-body">
+              <h6 class="card-title">{{ drama.drama_data[0].name }}</h6>
+              <!-- <p class="card-text">{{ drama.eng_name }}</p> -->
+              {% for category in drama.drama_data[0].categories %}
+                <span class="badge rounded-pill bg-primary text-white">{{ category }}</span>
+              {% endfor %}
             </div>
-            {% endfor %}
+          </div>
         </div>
+        {% endfor %}
+        {% endif %}
+      </div>
     </div>
 </body>
 </html>

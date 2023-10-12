@@ -1,3 +1,9 @@
+// 去掉分頁按鈕
+function deletePagination() {
+    var paginationContainer = document.querySelector(".pagination");
+    paginationContainer.innerHTML = "";
+}
+
 // 搜尋功能篩選
 function keywordSearch() {
     var keyword = document.getElementById('search-input').value;
@@ -9,7 +15,7 @@ function keywordSearch() {
             var responseData = JSON.parse(xhr.responseText);
             
             // 找到用於顯示戲劇資訊的容器元素
-            var dramaContainer = document.querySelector(".row");
+            var dramaContainer = document.querySelector(".drama-display");
     
             // 清空容器內的現有內容
             dramaContainer.innerHTML = "";
@@ -17,16 +23,16 @@ function keywordSearch() {
             // 遍歷responseData中的資料並插入到容器中
             responseData.dramas.forEach(function(drama) {
                 var dramaElement = document.createElement("div");
-                dramaElement.className = "col-md-3"; // 確保每個卡片佔用相同的列寬
+                dramaElement.className = "col-lg-4 col-md-6 col-sm-12"; // 確保每個卡片佔用相同的列寬
     
                 // 把category一個個取出放入html
                 const categoriesHTML = drama.categories.map(category => `
                     <span class="badge rounded-pill bg-primary text-white">${category}</span>`).join('');
-    
+                
                 // 生成html內容
                 dramaElement.innerHTML = `
                     <div class="card drama_list" style="width: 18rem;">
-                        <a href="/api/v1/detail/${drama.name}">
+                        <a href="/api/v1/detail/${drama._id.$oid}">
                             <img src="${drama.image}" alt="${drama.name}" class="drama-img">
                         </a>
                         <div class="card-body">
@@ -40,6 +46,7 @@ function keywordSearch() {
                 // 插入到html容器中
                 dramaContainer.appendChild(dramaElement);
             });
+            deletePagination();
         }
     };
     xhr.send();
@@ -54,7 +61,6 @@ document.addEventListener('DOMContentLoaded', function () {
         keywordSearch();
     });
 });
-
 
 // 類型按鈕篩選
 document.addEventListener("DOMContentLoaded", function() {
@@ -73,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     var responseData = JSON.parse(xhr.responseText);
             
                     // 找到用於顯示戲劇資訊的容器元素
-                    var dramaContainer = document.querySelector(".row");
+                    var dramaContainer = document.querySelector(".drama-display");
             
                     // 清空容器內的現有內容
                     dramaContainer.innerHTML = "";
@@ -81,16 +87,15 @@ document.addEventListener("DOMContentLoaded", function() {
                     // 遍歷responseData中的資料並插入到容器中
                     responseData.dramas.forEach(function(drama) {
                         var dramaElement = document.createElement("div");
-                        dramaElement.className = "col-md-3"; // 確保每個卡片佔用相同的列寬
+                        dramaElement.className = "col-lg-4 col-md-6 col-sm-12"; // 確保每個卡片佔用相同的列寬
             
                         // 把category一個個取出放入html
                         const categoriesHTML = drama.categories.map(category => `
                             <span class="badge rounded-pill bg-primary text-white">${category}</span>`).join('');
-            
                         // 生成html內容
                         dramaElement.innerHTML = `
-                            <div class="card drama_list" style="width: 16rem;">
-                                <a href="/api/v1/detail/${drama.name}">
+                            <div class="card drama_list" style="width: 18rem;">
+                                <a href="/api/v1/detail/${drama._id.$oid}">
                                     <img src="${drama.image}" alt="${drama.name}" class="drama-img">
                                 </a>
                                 <div class="card-body">
@@ -104,6 +109,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         // 插入到html容器中
                         dramaContainer.appendChild(dramaElement);
                     });
+                    deletePagination();
                 }
             };
             xhr.send();
@@ -116,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function() {
 document.addEventListener('DOMContentLoaded', function () {
     const stars = document.querySelectorAll('#rating-stars i');
     // 獲取資料庫儲存的評分數據，如果沒有就預設為0
-    const scoreElement = document.getElementById('score');
+    const scoreElement = document.getElementById('rating');
     const initialScore = scoreElement ? parseInt(scoreElement.innerText) : 0;
 
     console.log('Initial Score:', initialScore);
@@ -145,15 +151,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
-            const dramaName = this.parentElement.getAttribute('data-movie-name');
+            const dramaId = this.parentElement.getAttribute('data-movie-id');
             const selectedStars = document.querySelectorAll('#rating-stars i.active').length;
 
             // 將評分數據發送到後端
-            fetch(`/api/v1/score/${dramaName}/${selectedStars}`, { method: 'POST' })
+            fetch(`/api/v1/rating/${dramaId}/${selectedStars}`, { method: 'POST' })
                 .then(response => response.json())
                 .then(data => {
                     // 更新前端顯示的評分
-                    document.querySelector('#rating-stars p').innerText = `score:${data.score}`;
+                    document.querySelector('#rating').innerText = `${data.rating}`;
                 });
         });
     });
