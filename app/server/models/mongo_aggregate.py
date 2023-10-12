@@ -119,7 +119,8 @@ def content_based_rec_drama(id):
             "detail": {
                 "_id": 1,
                 "name": 1,
-                "image": 1
+                "image": 1,
+                "categories": 1
                 }
             }
         }
