@@ -6,7 +6,7 @@ from bson import ObjectId, json_util
 from datetime import datetime, timedelta
 from server import app
 from server.models.mongodb import MongoDBConnector
-from server.models.mongo_aggregate import hot_drama, drama_detail, content_based_rec_drama, user_rating_drama, similarity_user_like
+from server.models.mongo_aggregate import hot_drama, drama_detail, content_based_rec_drama, user_rating_drama, similarity_user_like, member_content_based_rec_drama
 
 
 # 連線mongodb
@@ -22,6 +22,8 @@ mongo_connect_content_based = MongoDBConnector('watchnext', 'drama_similarity_co
 content_based_collection = mongo_connect_content_based.get_collection()
 mongo_connect_user_based = MongoDBConnector('watchnext', 'drama_similarity_user_based')
 user_based_collection = mongo_connect_user_based.get_collection()
+mongo_connect_item_based = MongoDBConnector('watchnext', 'drama_similarity_item_based')
+item_based_collection = mongo_connect_item_based.get_collection()
 
 
 @app.route('/')
@@ -86,13 +88,15 @@ def rating(drama_id, rating):
 def get_rating_drama():
     if current_user.is_authenticated:
         rating_drama_data = user_rating_collection.aggregate(user_rating_drama(current_user.id))
+        user_rating = user_rating_collection.aggregate([{"$match": {"user_id": current_user.id, "rating": {"$in": [4, 5]}}}])
+        rating_drama_list = [rating['drama_id'] for rating in user_rating]
+        print(rating_drama_list)
+        similarity_user_data = item_based_collection.aggregate(member_content_based_rec_drama(rating_drama_list, 20))
+        similarity_user_data_list = list(similarity_user_data)
+        similarity_user_data_len = len(similarity_user_data_list)
+        print(similarity_user_data_len)
+        similarity_user_drama_data = item_based_collection.aggregate(member_content_based_rec_drama(rating_drama_list, 20))
 
-        user_based = user_based_collection.find_one({"user1_id": current_user.id}, sort=[("similarity", -1)])
-        similarity_user_drama_data = None
-        if user_based:
-            similarity_user_id = user_based.get("user2_id")
-            print(similarity_user_id)
-            similarity_user_drama_data = user_rating_collection.aggregate(similarity_user_like(similarity_user_id))
-        return render_template('member.html', dramas=rating_drama_data, rec_drama = similarity_user_drama_data)
+        return render_template('member.html', dramas=rating_drama_data, rec_drama = similarity_user_drama_data, similarity_user_data_len=similarity_user_data_len)
     else:
         return redirect(url_for('get_drama'))

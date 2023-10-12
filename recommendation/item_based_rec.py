@@ -46,6 +46,8 @@ for user, dramas in normalized_user_dramas.items():
 # print(drama_pair_ratings)              
 
 # cosine similarity
+documents_to_insert = []
+batch_size = 10000
 similarity_tuples = []
 for drama_pair, rating_pairs in drama_pair_ratings.items():
     if len(rating_pairs) < 2:
@@ -54,6 +56,19 @@ for drama_pair, rating_pairs in drama_pair_ratings.items():
     v2 = np.array([rating_pair[1] for rating_pair in rating_pairs]).reshape(1, -1)
     similarity_matrix = cosine_similarity(v1, v2)
     similarity = similarity_matrix[0, 0]
-    query = {"drama1_id": drama_pair[0], "drama2_id": drama_pair[1]}
-    update_data = {"$set": {"similarity": similarity}}
-    item_based_collection.update_one(query, update_data, upsert=True)
+    item_based_similarity = {
+                "drama1_id": drama_pair[0],
+                "drama2_id": drama_pair[1],
+                "similarity": similarity
+            }
+    documents_to_insert.append(item_based_similarity)
+
+    if len(documents_to_insert) == batch_size:
+        item_based_collection.insert_many(documents_to_insert)
+        documents_to_insert = []
+if documents_to_insert:
+    item_based_collection.insert_many(documents_to_insert)
+
+    # query = {"drama1_id": drama_pair[0], "drama2_id": drama_pair[1]}
+    # update_data = {"$set": {"similarity": similarity}}
+    # item_based_collection.update_one(query, update_data, upsert=True)
