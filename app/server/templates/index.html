@@ -2,7 +2,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>HOME</title>
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+  <title>Watch Next</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="/static/style.css">
 </head>
@@ -10,7 +11,9 @@
   <div class="fixed-top">
     <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #00416A;" >
       <div class="container-fluid">
-        <h1 class="text-white", style="margin-bottom: 0px">Watch Next</h1>
+        <a class="nav-link text-white" href="/" style="padding: 0px">
+          <h1 class="text-white", style="margin-bottom: 0px">Watch Next</h1>
+        </a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0 ml-auto">
             <form id="search" class="d-flex" role="search">
@@ -43,7 +46,7 @@
       </div>
     </nav>
   </div>
-  <div class="row g-0 text-center" style="margin-top: 80px">
+  <div class="row g-0 text-center" style="margin-top: 100px">
     <div class="col-sm-6 col-md-10">
       <div class="text-center">
         <button type="button" id="funnyButton" data-category="喜劇" class="btn btn-outline-primary btn-sm">喜劇</button>
@@ -86,6 +89,7 @@
     <div class="col-6 col-md-2">
       <div class="hot-drama">
         <h3>Top 10</h3>
+        <h6>討論熱度總排行</h6>
         {% for hot in hot_drama %}
           <a href="/api/v1/detail/{{ hot.detail[0]._id }}">
             <img src="{{ hot.detail[0].image }}" alt="{{ hot.detail[0].name }}" class="hot-drama-img">
