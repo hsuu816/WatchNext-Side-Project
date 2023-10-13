@@ -58,7 +58,7 @@ def get_drama_detail(id):
     drama_detail_data = list(drama_collection.aggregate(drama_detail(id)))
     recommend_drama = list(content_based_collection.aggregate(content_based_rec_drama(id)))
 
-    rating = None
+    rating = "尚無評分"
     if current_user.is_authenticated:
         print(current_user.id, id)
         user = user_rating_collection.find_one({"drama_id": ObjectId(id), "user_id": current_user.id})

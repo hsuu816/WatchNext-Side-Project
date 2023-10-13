@@ -26,13 +26,16 @@ dash.index_string = '''
     <!DOCTYPE html>
     <html>
         <head>
-            <title>{%title%}</title>
+            <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+            <title>Dashboard</title>
             {%css%}
         </head>
         <body>
             <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #00416A;" >
                 <div class="container-fluid">
-                    <h1 class="text-white", style="margin-bottom: 0px">Watch Next</h1>
+                    <a class="nav-link text-white" href="/" style="padding: 0px">
+                        <h1 class="text-white", style="margin-bottom: 0px">Watch Next</h1>
+                    </a>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0 ml-auto">
                             <li class="nav-item">
