@@ -2,11 +2,12 @@ from flask import render_template, jsonify, redirect, url_for, request
 from flask_login import current_user
 from flask_paginate import Pagination, get_page_parameter
 import urllib.parse
+import re
 from bson import ObjectId, json_util
 from datetime import datetime, timedelta
 from server import app
 from server.models.mongodb import MongoDBConnector
-from server.models.mongo_aggregate import hot_drama, drama_detail, content_based_rec_drama, user_rating_drama, similarity_user_like, member_content_based_rec_drama
+from server.models.mongo_aggregate import hot_drama, drama_detail, content_based_rec_drama, user_rating_drama, member_content_based_rec_drama, key_word_search
 
 
 # 連線mongodb
@@ -47,8 +48,8 @@ def category_select(category):
 
 @app.route('/api/v1/search/<keyword>', methods=['GET'])
 def search(keyword):
-    encoded_keyword = urllib.parse.unquote(keyword)
-    drama_data = list(drama_collection.find({"name": {"$regex":encoded_keyword}}))
+    encoded_keyword = re.compile(urllib.parse.unquote(keyword), re.IGNORECASE)
+    drama_data = list(drama_collection.find(key_word_search(encoded_keyword)))
     drama_data_json = json_util.dumps({"dramas": drama_data})
     return drama_data_json
 

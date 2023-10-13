@@ -198,3 +198,13 @@ def member_content_based_rec_drama(id_list, limit):
         }}
     ]
     return member_content_based_rec_drama
+
+def key_word_search(keyword):
+    key_word_search = {
+        "$or":[
+            {"name": {"$regex": keyword}},
+            {"eng_name": {"$regex": keyword}},
+            {"detail": {"$regex": keyword}}
+        ]
+    }
+    return key_word_search
