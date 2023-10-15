@@ -1,18 +1,12 @@
-import os
-from dotenv import load_dotenv
+from modeules.mongodb import MongoDBConnector
 from collections import defaultdict
 import numpy as np
-from pymongo import MongoClient
 from sklearn.metrics.pairwise import cosine_similarity
 
-load_dotenv()
-
-# 連結到 Mongodb
-password = os.getenv('mongo_password')
-conn = MongoClient(f"mongodb+srv://hsuu816:{password}@watchnext.edwg2oq.mongodb.net/")
-mongo_db = conn.watchnext
-user_rating_collection = mongo_db.user_rating
-item_based_collection = mongo_db.drama_similarity_item_based
+mongo_user_rating = MongoDBConnector('watchnext', 'user_rating')
+user_rating_collection = mongo_user_rating.get_collection()
+mongo_connect_item_based = MongoDBConnector('watchnext', 'drama_similarity_item_based')
+item_based_collection = mongo_connect_item_based.get_collection()
 
 def item_based_rec():
     user_dramas = defaultdict(list)
@@ -55,16 +49,16 @@ def item_based_rec():
         similarity_matrix = cosine_similarity(v1, v2)
         similarity = similarity_matrix[0, 0]
         item_based_similarity = {
-                    "drama1_id": drama_pair[0],
-                    "drama2_id": drama_pair[1],
-                    "similarity": similarity
-                }
+            "drama1_id": drama_pair[0],
+            "drama2_id": drama_pair[1],
+            "similarity": similarity
+        }
         documents_to_insert.append(item_based_similarity)
 
         if len(documents_to_insert) == batch_size:
             item_based_collection.insert_many(documents_to_insert)
             documents_to_insert = []
+            print("Successfully inserted into Mongodb")
     if documents_to_insert:
         item_based_collection.insert_many(documents_to_insert)
-
-item_based_rec()
+        print("Done")
