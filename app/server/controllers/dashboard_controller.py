@@ -11,7 +11,9 @@ from wordcloud import WordCloud
 from io import BytesIO
 import base64
 
-external_stylesheets = ['https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css', '/static/style.css']
+external_stylesheets = ['https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css',
+                        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css', 
+                        '/static/style.css']
 
 dash = Dash(server=app, routes_pathname_prefix="/dashboard/", external_stylesheets=external_stylesheets)
 dash.config.suppress_callback_exceptions = True
@@ -46,10 +48,39 @@ dash.index_string = '''
                 </div>
             </nav>
             {%app_entry%}
-            <footer>
+            <footer class="text-center text-lg-start bg-light text-muted">
                 {%config%}
                 {%scripts%}
                 {%renderer%}
+                <div class="container text-center text-md-start mt-5">
+                <div class="row mt-3">
+                    <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-3">
+                    <h6 class="text-uppercase text-left fw-bold mb-4 mt-3">Watch Next</h6>
+                    <p class="text-left">彙整戲劇資訊與評論的網站</p>
+                    <p class="text-left">參考評論來決定你下一部要追的劇</p>
+                    <p class="text-left">小提醒：這裡沒有電影喔ฅ^•ﻌ•^ฅ</p>
+                    </div>
+                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                    <h6 class="text-uppercase text-left fw-bold mb-4 mt-3">Contact</h6>
+                    <a class="text-muted" href="mailto:hsuu816@gmail.com">
+                        <p class="text-left">
+                        <i class="fas fa-envelope me-3 text-left"></i>
+                        hsuu816@gmail.com
+                        </p>
+                    </a>
+                    <a class="text-muted" href="https://www.linkedin.com/in/shih-yun-hsu-8a3606277">
+                        <p class="text-left"><i class="fab fa-linkedin"></i> Shih Yun Hsu</p>
+                    </a>
+                    <a class="text-muted" href="https://github.com/hsuu816">
+                        <p class="text-left"><i class="fab fa-github"></i> hsuu816</p>
+                    </a>
+                    </div>
+                </div>
+                </div>
+                <div class="text-center p-2" style="background-color: rgba(0, 0, 0, 0.05);">
+                © 2023 Copyright:
+                <a class="text-reset fw-bold" href="https://www.watchnexts.com">watchnexts.com</a>
+                </div>
             </footer>
         </body>
     </html>
