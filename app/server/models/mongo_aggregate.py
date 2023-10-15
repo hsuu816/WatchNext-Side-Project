@@ -2,27 +2,17 @@ from bson import ObjectId
 
 def drama_detail(id):
     drama_comment = [
-        {
-            "$match": {
-                "_id": ObjectId(id)
-            }
-        },
-        {
-            "$lookup": {
+        {"$match": {"_id": ObjectId(id)}},
+        {"$lookup": {
                 "from": "comment",
                 "localField": "name",
                 "foreignField": "drama_name",
                 "as": "comments",
                 "pipeline": [
-                    {
-                        "$project": {
-                            "_id": 0,
-                            "drama_name": 0
-                        }
-                    }
-                ]
-            }
-        }
+                    {"$project": {"_id": 0,"drama_name": 0}},
+                    {"$sort": {"release_time": -1}}
+                    ]
+        }}
     ]
     return drama_comment
 
