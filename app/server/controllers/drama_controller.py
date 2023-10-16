@@ -1,4 +1,4 @@
-from flask import render_template, jsonify, redirect, url_for, request
+from flask import render_template, jsonify, redirect, url_for, request, abort
 from flask_login import current_user
 from flask_paginate import Pagination, get_page_parameter
 import urllib.parse
@@ -43,6 +43,8 @@ def get_drama():
 def category_select(category):
     encoded_category = urllib.parse.unquote(category)
     drama_data = list(drama_collection.find({"categories": encoded_category}))
+    if not drama_data:
+        abort(404)
     drama_data_json = json_util.dumps({"dramas": drama_data})
     return drama_data_json
 
@@ -55,7 +57,12 @@ def search(keyword):
 
 @app.route('/api/v1/detail/<id>',  methods=['GET'])
 def get_drama_detail(id):
+    if not ObjectId.is_valid(id):
+        abort(404)
+
     drama_detail_data = list(drama_collection.aggregate(drama_detail(id)))
+    if not drama_detail_data:
+        abort(404)
     recommend_drama = list(content_based_collection.aggregate(content_based_rec_drama(id)))
 
     rating = "尚無評分"
@@ -91,11 +98,9 @@ def get_rating_drama():
         rating_drama_data = user_rating_collection.aggregate(user_rating_drama(current_user.id))
         user_rating = user_rating_collection.aggregate([{"$match": {"user_id": current_user.id, "rating": {"$in": [4, 5]}}}])
         rating_drama_list = [rating['drama_id'] for rating in user_rating]
-        print(rating_drama_list)
         similarity_user_data = item_based_collection.aggregate(member_content_based_rec_drama(rating_drama_list, 20))
         similarity_user_data_list = list(similarity_user_data)
         similarity_user_data_len = len(similarity_user_data_list)
-        print(similarity_user_data_len)
         similarity_user_drama_data = item_based_collection.aggregate(member_content_based_rec_drama(rating_drama_list, 20))
 
         return render_template('member.html', dramas=rating_drama_data, rec_drama = similarity_user_drama_data, similarity_user_data_len=similarity_user_data_len)
