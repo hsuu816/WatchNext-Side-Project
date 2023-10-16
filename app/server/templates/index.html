@@ -47,30 +47,31 @@
       </div>
     </nav>
   </div>
-  <div class="row g-0 text-center" style="margin-top: 100px">
-    <div class="col-sm-6 col-md-10">
+  <div class="row g-0 text-center no-gutters" style="margin-top: 80px">
+    <div class="col-10">
       <div class="text-center">
-        <button type="button" id="funnyButton" data-category="喜劇" class="btn btn-outline-primary btn-sm">喜劇</button>
-        <button type="button" id="loveButton" data-category="愛情" class="btn btn-outline-primary btn-sm">愛情</button>
-        <button type="button" id="warmthButton" data-category="溫馨/家庭" class="btn btn-outline-primary btn-sm">溫馨/家庭</button>
-        <button type="button" id="animationButton" data-category="動畫" class="btn btn-outline-primary btn-sm">動畫</button>
-        <button type="button" id="musicButton" data-category="音樂/歌舞" class="btn btn-outline-primary btn-sm">音樂/歌舞</button>
-        <button type="button" id="historyButton" data-category="歷史/傳記" class="btn btn-outline-primary btn-sm">歷史/傳記</button>
-        <button type="button" id="warButton" data-category="戰爭" class="btn btn-outline-primary btn-sm">戰爭</button>
-        <button type="button" id="documentaryButton" data-category="紀錄片" class="btn btn-outline-primary btn-sm">紀錄片</button>
-        <button type="button" id="inspirationalButton" data-category="勵志" class="btn btn-outline-primary btn-sm">勵志</button>
-        <button type="button" id="martialButton" data-category="武俠" class="btn btn-outline-primary btn-sm">武俠</button>
-        <button type="button" id="adventureButton" data-category="冒險" class="btn btn-outline-primary btn-sm">冒險</button>
-        <button type="button" id="scienceButton" data-category="科幻" class="btn btn-outline-primary btn-sm">科幻</button>
-        <button type="button" id="fantasyButton" data-category="奇幻" class="btn btn-outline-primary btn-sm">奇幻</button>
-        <button type="button" id="plotButton" data-category="劇情" class="btn btn-outline-primary btn-sm">劇情</button>
-        <button type="button" id="crimeButton" data-category="犯罪" class="btn btn-outline-primary btn-sm">犯罪</button>
-        <button type="button" id="horrorButton" data-category="恐怖" class="btn btn-outline-primary btn-sm">恐怖</button>
-        <button type="button" id="thrillerButton" data-category="懸疑/驚悚" class="btn btn-outline-primary btn-sm">懸疑/驚悚</button>
+        <button type="button" id="funnyButton" data-category="喜劇" class="btn btn-outline-primary btn-sm btn-display">喜劇</button>
+        <button type="button" id="actionButton" data-category="動作" class="btn btn-outline-primary btn-sm btn-display">動作</button>
+        <button type="button" id="loveButton" data-category="愛情" class="btn btn-outline-primary btn-sm btn-display">愛情</button>
+        <button type="button" id="warmthButton" data-category="溫馨/家庭" class="btn btn-outline-primary btn-sm btn-display">溫馨</button>
+        <button type="button" id="animationButton" data-category="動畫" class="btn btn-outline-primary btn-sm btn-display">動畫</button>
+        <button type="button" id="musicButton" data-category="音樂/歌舞" class="btn btn-outline-primary btn-sm btn-display">歌舞</button>
+        <button type="button" id="historyButton" data-category="歷史/傳記" class="btn btn-outline-primary btn-sm btn-display">歷史</button>
+        <button type="button" id="warButton" data-category="戰爭" class="btn btn-outline-primary btn-sm btn-display">戰爭</button>
+        <button type="button" id="documentaryButton" data-category="紀錄片" class="btn btn-outline-primary btn-sm btn-display">紀錄片</button>
+        <button type="button" id="inspirationalButton" data-category="勵志" class="btn btn-outline-primary btn-sm btn-display">勵志</button>
+        <button type="button" id="martialButton" data-category="武俠" class="btn btn-outline-primary btn-sm btn-display">武俠</button>
+        <button type="button" id="adventureButton" data-category="冒險" class="btn btn-outline-primary btn-sm btn-display">冒險</button>
+        <button type="button" id="scienceButton" data-category="科幻" class="btn btn-outline-primary btn-sm btn-display">科幻</button>
+        <button type="button" id="fantasyButton" data-category="奇幻" class="btn btn-outline-primary btn-sm btn-display">奇幻</button>
+        <button type="button" id="plotButton" data-category="劇情" class="btn btn-outline-primary btn-sm btn-display">劇情</button>
+        <button type="button" id="crimeButton" data-category="犯罪" class="btn btn-outline-primary btn-sm btn-display">犯罪</button>
+        <button type="button" id="horrorButton" data-category="恐怖" class="btn btn-outline-primary btn-sm btn-display">恐怖</button>
+        <button type="button" id="thrillerButton" data-category="懸疑/驚悚" class="btn btn-outline-primary btn-sm btn-display">懸疑</button>
       </div>
-      <div class="drama-display row">
+      <div class="drama-display row text-center">
         {% for drama in dramas %}
-        <div class="col-lg-4 col-md-6 col-sm-12">
+        <div>
           <div class="card drama_list" style="width: 18rem;">
             <a href="/api/v1/detail/{{ drama._id }}">
               <img src="{{ drama.image }}" alt="{{ drama.name }}" class="drama-img">
@@ -87,7 +88,7 @@
         {% endfor %}
       </div>
     </div>
-    <div class="col-6 col-md-2">
+    <div class="col-2">
       <div class="hot-drama">
         <h3>Top 10</h3>
         <h6>討論熱度總排行</h6>

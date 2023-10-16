@@ -33,7 +33,7 @@ function keywordSearch() {
             } else {
                 responseData.dramas.forEach(function(drama) {
                     var dramaElement = document.createElement("div");
-                    dramaElement.className = "col-lg-4 col-md-6 col-sm-12"; // 確保每個卡片佔用相同的列寬
+                    dramaElement.className = "text-center";
         
                     // 把category一個個取出放入html
                     const categoriesHTML = drama.categories.map(category => `
@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     // 遍歷responseData中的資料並插入到容器中
                     responseData.dramas.forEach(function(drama) {
                         var dramaElement = document.createElement("div");
-                        dramaElement.className = "col-lg-4 col-md-6 col-sm-12"; // 確保每個卡片佔用相同的列寬
+                        dramaElement.className = "text-center";
             
                         // 把category一個個取出放入html
                         const categoriesHTML = drama.categories.map(category => `
