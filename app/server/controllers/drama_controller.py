@@ -31,10 +31,10 @@ item_based_collection = mongo_connect_item_based.get_collection()
 def get_drama():
     # 從mongodb中擷取資料
     page = request.args.get(get_page_parameter(), type=int, default=1)
-    limit_value = 30
-    offset_value=(30 * int(page)-30)
+    limit_value = 24
+    offset_value=(24 * int(page)-24)
     total = drama_collection.count_documents({})
-    pagination = Pagination(page=page, total=total, per_page=30)
+    pagination = Pagination(page=page, total=total, per_page=24)
     drama_data = drama_collection.find({}).skip(offset_value).limit(limit_value)
     hot_drama_data = list(comment_collection.aggregate(hot_drama(10)))
     return render_template('index.html', dramas=drama_data, hot_drama=hot_drama_data, pagination=pagination)
@@ -65,7 +65,7 @@ def get_drama_detail(id):
         abort(404)
     recommend_drama = list(content_based_collection.aggregate(content_based_rec_drama(id)))
 
-    rating = "尚無評分"
+    rating = "尚未評分"
     if current_user.is_authenticated:
         print(current_user.id, id)
         user = user_rating_collection.find_one({"drama_id": ObjectId(id), "user_id": current_user.id})
