@@ -18,34 +18,45 @@ function keywordSearch() {
             var dramaContainer = document.querySelector(".drama-display");
     
             // 清空容器內的現有內容
+            
             dramaContainer.innerHTML = "";
     
             // 遍歷responseData中的資料並插入到容器中
-            responseData.dramas.forEach(function(drama) {
-                var dramaElement = document.createElement("div");
-                dramaElement.className = "col-lg-4 col-md-6 col-sm-12"; // 確保每個卡片佔用相同的列寬
-    
-                // 把category一個個取出放入html
-                const categoriesHTML = drama.categories.map(category => `
-                    <span class="badge rounded-pill bg-primary text-white">${category}</span>`).join('');
-                
-                // 生成html內容
-                dramaElement.innerHTML = `
-                    <div class="card drama_list" style="width: 18rem;">
-                        <a href="/api/v1/detail/${drama._id.$oid}">
-                            <img src="${drama.image}" alt="${drama.name}" class="drama-img">
-                        </a>
-                        <div class="card-body">
-                            <h6 class="card-title">${drama.name}</h6>
-                            <p class="card-text">${drama.eng_name}</p>
-                            ${categoriesHTML}
+            if (responseData.dramas.length === 0) {
+                // 如果為空，插入顯示文字的 HTML 元素
+                var noDataElement = document.createElement("div");
+                noDataElement.className = "text-center";
+                noDataElement.style.width = "100%";
+                noDataElement.style.margin = "20px";
+                noDataElement.innerHTML = "<p>沒有相關戲劇，請使用別的關鍵字搜尋。</p>";
+                dramaContainer.appendChild(noDataElement);
+            } else {
+                responseData.dramas.forEach(function(drama) {
+                    var dramaElement = document.createElement("div");
+                    dramaElement.className = "text-center";
+        
+                    // 把category一個個取出放入html
+                    const categoriesHTML = drama.categories.map(category => `
+                        <span class="badge rounded-pill bg-primary text-white">${category}</span>`).join('');
+                    
+                    // 生成html內容
+                    dramaElement.innerHTML = `
+                        <div class="card drama_list" style="width: 18rem;">
+                            <a href="/api/v1/detail/${drama._id.$oid}">
+                                <img src="${drama.image}" alt="${drama.name}" class="drama-img">
+                            </a>
+                            <div class="card-body">
+                                <h6 class="card-title">${drama.name}</h6>
+                                <p class="card-text">${drama.eng_name}</p>
+                                ${categoriesHTML}
+                            </div>
                         </div>
-                    </div>
-                `;
-    
-                // 插入到html容器中
-                dramaContainer.appendChild(dramaElement);
-            });
+                    `;
+        
+                    // 插入到html容器中
+                    dramaContainer.appendChild(dramaElement);
+                });
+            }
             deletePagination();
         }
     };
@@ -55,10 +66,18 @@ function keywordSearch() {
 document.addEventListener('DOMContentLoaded', function () {
     // 取得搜尋按鈕
     var searchButton = document.getElementById('search-button');
+    var searchInput = document.getElementById('search-input');
 
     // 當點選search時，執行keywordSearch function
     searchButton.addEventListener('click', function () {
         keywordSearch();
+    });
+    
+    searchInput.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            keywordSearch();
+        }
     });
 });
 
@@ -87,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     // 遍歷responseData中的資料並插入到容器中
                     responseData.dramas.forEach(function(drama) {
                         var dramaElement = document.createElement("div");
-                        dramaElement.className = "col-lg-4 col-md-6 col-sm-12"; // 確保每個卡片佔用相同的列寬
+                        dramaElement.className = "text-center";
             
                         // 把category一個個取出放入html
                         const categoriesHTML = drama.categories.map(category => `

@@ -2,7 +2,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HOME</title>
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+  <title>DRAMA</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="/static/style.css">
@@ -11,7 +12,12 @@
   <div class="fixed-top">
     <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #01090f;" >
       <div class="container-fluid">
-        <h1 class="text-white">Watch Next</h1>
+        <a class="nav-link text-white" href="/" style="padding: 0px">
+          <h1 class="text-white", style="margin-bottom: 0px">Watch Next</h1>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0 ml-auto">
             <li class="nav-item">
@@ -36,87 +42,122 @@
               </li>
             {% endif %}
           </ul>
+          <!-- <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-sm btn-outline-secondary text-white" type="button">Search</button>
+          </form> -->
         </div>
       </div>
     </nav>
   </div>
   <div class="drama-container-detail" style="margin-top: 80px">
-    {% for drama in dramas %}
-    <div class="drama row">
-      <div class="detail col p-3 text-center">
-        <h2>🍿{{ drama.name }}🍿</h2>
-        <p>{{ drama.eng_name }}</p>
-        <img src="{{ drama.image }}" alt="{{ drama.name }}" class="detail-img">
-        {% if current_user.is_authenticated %}
-        <div>
-          {% if rating %}
+      {% for drama in dramas %}
+      <div class="drama row">
+        <div class="detail col p-3 text-center">
+          <h4>🍿{{ drama.name }}🍿</h4>
+          <p>{{ drama.eng_name }}</p>
+          <img src="{{ drama.image }}" alt="{{ drama.name }}" class="detail-img">
+          {% if current_user.is_authenticated %}
+          <div style="margin-top: 20px;">
             <p style="display: inline;">你的評分：</p>
             <p id="rating" style="display: inline;">{{ rating }}</p>
-          {% else %}
-            <p>你的評分：尚未評分</p>
-          {% endif %}
-          <div id="rating-stars" data-movie-id="{{ drama._id }}">
-            <i class="fas fa-star" data-star="1"></i>
-            <i class="fas fa-star" data-star="2"></i>
-            <i class="fas fa-star" data-star="3"></i>
-            <i class="fas fa-star" data-star="4"></i>
-            <i class="fas fa-star" data-star="5"></i>
+            <div id="rating-stars" data-movie-id="{{ drama._id }}" style="margin-top: 20px;">
+              <i class="fas fa-star" data-star="1"></i>
+              <i class="fas fa-star" data-star="2"></i>
+              <i class="fas fa-star" data-star="3"></i>
+              <i class="fas fa-star" data-star="4"></i>
+              <i class="fas fa-star" data-star="5"></i>
+            </div>
           </div>
+          {% endif %}
         </div>
-        {% endif %}
+        <div class="information col p-3">
+          <h4 class="text-center">詳細資訊</h4>
+          {% if drama.categories %}
+            <p>🔎類別：{{ drama.categories | join(", ") }}</p>
+          {% else %}
+            <p></p>
+          {% endif %}
+          {% for detail in drama.detail[1:] %}
+            <p>🔎{{ detail }}</p>
+          {% endfor %}
+        </div>
+        <div class="drama_description col p-3">
+          <h4 class="text-center">劇情簡介</h4>
+          {% for drama in dramas %}
+            <p>{{ drama.description }}</p>
+          {% endfor %}
+        </div>
+        <div class="comment col p-3">
+          <h4 class="text-center">網友討論</h4>
+          {% if drama.comments %}
+          {% for article in drama.comments %}
+            <a href="{{ article.url }}">
+              <h6>{{ article.title }}</h6>
+            </a>
+            <p>{{ article.release_time }}</p>
+            {% for comment in article.comments[:7] %}
+              <p>{{ comment }}</p>
+            {% endfor %}  
+          {% endfor %}
+          {% else %}
+            <p class="text-center">~目前尚無評論~</p>
+          {% endif %}
+        </div>
       </div>
-      <div class="information col p-3">
-        <h4 class="text-center">詳細資訊</h4>
-        {% if drama.categories %}
-          <p>🔎類別：{{ drama.categories | join(", ") }}</p>
-        {% else %}
-          <p></p>
-        {% endif %}
-        {% for detail in drama.detail[1:] %}
-          <p>🔎{{ detail }}</p>
-        {% endfor %}
-      </div>
-      <div class="drama_description col p-3">
-        <h4 class="text-center">劇情簡介</h4>
-        {% for drama in dramas %}
-          <p>{{ drama.description }}</p>
-        {% endfor %}
-      </div>
-      <div class="comment col p-3">
-        <h4 class="text-center">網友討論</h4>
-        {% if drama.comments %}
-        {% for article in drama.comments %}
-          <a href="{{ article.url }}">
-            <h6>{{ article.title }}</h6>
-          </a>
-          <p>{{ article.release_time }}</p>
-          {% for comment in article.comments[:7] %}
-            <p>{{ comment }}</p>
-          {% endfor %}  
-        {% endfor %}
-        {% else %}
-          <p class="text-center">~目前尚無評論~</p>
-        {% endif %}
-      </div>
-    </div>
-    {% endfor %}
+      {% endfor %}
   </div>
-  <p class="text-center blockquote">推薦戲劇</p>
-  <div class="row">
+  <p class="text-center blockquote">你可能會喜歡</p>
+  <div class="row no-gutters">
     {% for drama in recommend_drama %}
       <div class="col-md-3"> <!-- 每個卡片佔用4分之1的寬度-->
-        <div class="card" style="width: 18rem;">
-          <a href="/api/v1/detail/{{ drama.detail[0]._id }}">
-            <img src="{{ drama.detail[0].image }}" class="card-img-top recommend-img" alt="{{ drama.detail[0].name }}">
-          </a>
-          <div class="card-body">
-            <h5 class="card-title">{{ drama.detail[0].name }}</h5>
-            <!-- <p class="card-text">{{ drama.comment_count }}篇討論文</p> -->
+          <div class="card mx-auto" style="width: 18rem;">
+            <a href="/api/v1/detail/{{ drama.detail[0]._id }}">
+              <img src="{{ drama.detail[0].image }}" class="card-img-top recommend-img" alt="{{ drama.detail[0].name }}">
+            </a>
+            <div class="card-body text-center">
+              <h5 class="card-title">{{ drama.detail[0].name }}</h5>
+              {% for category in drama.detail[0].categories %}
+                <span class="badge rounded-pill bg-primary text-white">{{ category }}</span>
+              {% endfor %}
+            </div>
           </div>
-        </div>
       </div>
     {% endfor %}
   </div>
+  
+  <footer class="text-center text-lg-start bg-light text-muted">
+    <div class="container text-center text-md-start mt-5">
+      <div class="row mt-3">
+        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-3">
+          <h6 class="text-uppercase text-left fw-bold mb-4 mt-3">Watch Next</h6>
+          <p class="text-left">彙整戲劇資訊與評論的網站</p>
+          <p class="text-left">參考評論來決定你下一部要追的劇</p>
+          <p class="text-left">小提醒：這裡沒有電影喔ฅ^•ﻌ•^ฅ</p>
+        </div>
+        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+          <h6 class="text-uppercase text-left fw-bold mb-4 mt-3">Contact</h6>
+          <a class="text-muted" href="mailto:hsuu816@gmail.com">
+            <p class="text-left">
+              <i class="fas fa-envelope me-3 text-left"></i>
+              hsuu816@gmail.com
+            </p>
+          </a>
+          <a class="text-muted" href="https://www.linkedin.com/in/shih-yun-hsu-8a3606277">
+            <p class="text-left"><i class="fab fa-linkedin"></i> Shih Yun Hsu</p>
+          </a>
+          <a class="text-muted" href="https://github.com/hsuu816">
+            <p class="text-left"><i class="fab fa-github"></i> hsuu816</p>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="text-center p-2" style="background-color: rgba(0, 0, 0, 0.05);">
+      © 2023 Copyright:
+      <a class="text-reset fw-bold" href="https://www.watchnexts.com">watchnexts.com</a>
+    </div>
+  </footer>
+
   <script src="/static/scripts.js"></script>
 </body>
 </html>
