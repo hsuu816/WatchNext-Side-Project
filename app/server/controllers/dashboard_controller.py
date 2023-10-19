@@ -1,3 +1,4 @@
+import os
 from server import app
 from dash import Dash, html, dcc
 from dash.dependencies import Input, Output
@@ -23,67 +24,8 @@ mongo_connector = MongoDBConnector()
 comment_collection = mongo_connector.get_collection('comment')
 drama_collection = mongo_connector.get_collection('drama')
 
-dash.index_string = '''
-    <!DOCTYPE html>
-    <html>
-        <head>
-            <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
-            <title>Dashboard</title>
-            {%css%}
-        </head>
-        <body>
-            <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #00416A;" >
-                <div class="container-fluid">
-                    <a class="nav-link text-white" href="/" style="padding: 0px">
-                        <h1 class="text-white", style="margin-bottom: 0px">Watch Next</h1>
-                    </a>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ml-auto">
-                            <li class="nav-item">
-                                <a class="nav-link active text-white" aria-current="page" href="/">回首頁</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-            {%app_entry%}
-            <footer class="text-center text-lg-start bg-light text-muted">
-                {%config%}
-                {%scripts%}
-                {%renderer%}
-                <div class="container text-center text-md-start mt-5">
-                <div class="row mt-3">
-                    <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-3">
-                    <h6 class="text-uppercase text-left fw-bold mb-4 mt-3">Watch Next</h6>
-                    <p class="text-left">彙整戲劇資訊與評論的網站</p>
-                    <p class="text-left">參考評論來決定你下一部要追的劇</p>
-                    <p class="text-left">小提醒：這裡沒有電影喔ฅ^•ﻌ•^ฅ</p>
-                    </div>
-                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-                    <h6 class="text-uppercase text-left fw-bold mb-4 mt-3">Contact</h6>
-                    <a class="text-muted" href="mailto:hsuu816@gmail.com">
-                        <p class="text-left">
-                        <i class="fas fa-envelope me-3 text-left"></i>
-                        hsuu816@gmail.com
-                        </p>
-                    </a>
-                    <a class="text-muted" href="https://www.linkedin.com/in/shih-yun-hsu-8a3606277">
-                        <p class="text-left"><i class="fab fa-linkedin"></i> Shih Yun Hsu</p>
-                    </a>
-                    <a class="text-muted" href="https://github.com/hsuu816">
-                        <p class="text-left"><i class="fab fa-github"></i> hsuu816</p>
-                    </a>
-                    </div>
-                </div>
-                </div>
-                <div class="text-center p-2" style="background-color: rgba(0, 0, 0, 0.05);">
-                © 2023 Copyright:
-                <a class="text-reset fw-bold" href="https://www.watchnexts.com">watchnexts.com</a>
-                </div>
-            </footer>
-        </body>
-    </html>
-    '''
+with open(os.path.join(os.path.dirname(__file__), "..", "templates", "dashboard.html"), "r", encoding="utf-8") as file:
+    dash.index_string = file.read()
 
 dash.layout = dbc.Container([
     html.Div([
@@ -97,7 +39,7 @@ dash.layout = dbc.Container([
                     {'label': '三個月', 'value': '3m'},
                     {'label': '半年', 'value': '6m'},
                 ],
-                value='7d',  # 預設七天
+                value='1m',
                 labelStyle={'display': 'inline-block', 'margin-right': '10px'}
             ),
             style={'text-align': 'center', 'margin': '20px'}
@@ -146,7 +88,8 @@ def update_dashboard(selected_time_range):
         bar_chart_df,
         x='_id',
         y='count',
-        labels={'count': '文章數量', '_id': '劇名'}
+        labels={'count': '文章數量', '_id': '劇名'},
+        color_discrete_sequence=px.colors.sequential.Blues[::-1]
     )
 
     bar_fig.update_layout(
@@ -167,11 +110,14 @@ def update_dashboard(selected_time_range):
 
     pie_chart_data = drama_collection.aggregate(pie_chart_pipeline)
     pie_chart_df = pd.DataFrame(list(pie_chart_data))
+    pie_chart_df = pie_chart_df.rename(columns={'_id': '類型'})
+    pie_chart_df = pie_chart_df.rename(columns={'count': '數量'})
 
     pie_fig = px.pie(
         pie_chart_df,
-        names='_id',
-        values='count', 
+        names='類型',
+        values='數量',
+        color_discrete_sequence=px.colors.sequential.Blues[::-1]
     )
 
     pie_fig.update_layout(
