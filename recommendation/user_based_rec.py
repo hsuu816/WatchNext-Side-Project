@@ -1,21 +1,16 @@
-import os
-from dotenv import load_dotenv
+import sys
 import pandas as pd
 from collections import defaultdict
 import numpy as np
-from pymongo import MongoClient
-
 from sklearn.metrics.pairwise import cosine_similarity
 
-load_dotenv()
+sys.path.append('../app/server/models')
+from mongodb import MongoDBConnector
 
 # 連結到 Mongodb
-password = os.getenv('mongo_password')
-conn = MongoClient(f"mongodb+srv://hsuu816:{password}@watchnext.edwg2oq.mongodb.net/")
-mongo_db = conn.watchnext
-drama_collection = mongo_db.drama
-user_rating_collection = mongo_db.user_rating
-user_based_collection = mongo_db.drama_similarity_user_based
+mongo_connector = MongoDBConnector()
+user_rating_collection = mongo_connector.get_collection('user_rating')
+user_based_collection = mongo_connector.get_collection('drama_similarity_user_based')
 
 user_dramas = defaultdict(list)
 user_rating_data = user_rating_collection.find({})
@@ -44,7 +39,7 @@ for drama, users in normalized_user_dramas.items():
         for user_rating2 in users:
             if user_rating1[0] != user_rating2[0]:
                 drama_pair_ratings[(user_rating1[0], user_rating2[0])].append((user_rating1[1], user_rating2[1]))
-# print(drama_pair_ratings)              
+print(drama_pair_ratings)              
 
 # cosine similarity
 similarity_tuples = []

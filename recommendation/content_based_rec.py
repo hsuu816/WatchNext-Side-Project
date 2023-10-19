@@ -1,21 +1,14 @@
-import os
-from dotenv import load_dotenv
+import sys
 import pandas as pd
-
-import pymysql
-from pymongo import MongoClient
-
 from sklearn.metrics.pairwise import cosine_similarity
 
-load_dotenv()
-
+sys.path.append('../app/server/models')
+from mongodb import MongoDBConnector
 
 # 連結到 Mongodb
-password = os.getenv('mongo_password')
-conn = MongoClient(f"mongodb+srv://hsuu816:{password}@watchnext.edwg2oq.mongodb.net/")
-mongo_db = conn.watchnext
-drama_collection = mongo_db.drama
-content_based_collection = mongo_db.drama_similarity_content_based
+mongo_connector = MongoDBConnector()
+drama_collection = mongo_connector.get_collection('drama')
+content_based_collection = mongo_connector.get_collection('drama_similarity_content_based')
 
 mapping = {
     '播出日期': 'date',

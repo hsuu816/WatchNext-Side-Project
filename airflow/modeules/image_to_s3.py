@@ -4,9 +4,10 @@ from bs4 import BeautifulSoup
 import requests
 from io import BytesIO
 import time
+
 # 連線mongodb
-mongo_connect = MongoDBConnector('watchnext', 'drama')
-collection = mongo_connect.get_collection()
+mongo_connector = MongoDBConnector()
+drama_collection = mongo_connector.get_collection('drama')
 
 # 連線至s3
 try:
@@ -14,7 +15,7 @@ try:
 except:
     print("Error connecting to S3")
 
-drama_data = collection.find({"image": {"$not": {"$regex": "https://watchnext.s3.ap-southeast-2.amazonaws.com"}}})
+drama_data = drama_collection.find({"image": {"$not": {"$regex": "https://watchnext.s3.ap-southeast-2.amazonaws.com"}}})
 drama_list = []
 for drama in drama_data:
     drama_name = drama['name']
@@ -42,7 +43,7 @@ def upload_s3(image, name):
 
 # 更改mongodb內圖片網址
 def change_mongo_img_url(name, img_url):
-    result = collection.update_one({"name": name}, {"$set": {"image": img_url}})
+    result = drama_collection.update_one({"name": name}, {"$set": {"image": img_url}})
     print(result)
 
 for drama in drama_list:

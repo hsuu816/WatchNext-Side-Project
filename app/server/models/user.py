@@ -3,8 +3,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from server.models.mongodb import MongoDBConnector
 
-mongo_connect_drama = MongoDBConnector('watchnext', 'user')
-user_collection = mongo_connect_drama.get_collection()
+mongo_connector = MongoDBConnector()
+user_collection = mongo_connector.get_collection('user')
 
 class User(UserMixin):
 

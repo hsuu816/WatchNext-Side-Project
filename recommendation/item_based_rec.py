@@ -1,18 +1,15 @@
-import os
-from dotenv import load_dotenv
+import sys
 from collections import defaultdict
 import numpy as np
-from pymongo import MongoClient
 from sklearn.metrics.pairwise import cosine_similarity
 
-load_dotenv()
+sys.path.append('../app/server/models')
+from mongodb import MongoDBConnector
 
 # 連結到 Mongodb
-password = os.getenv('mongo_password')
-conn = MongoClient(f"mongodb+srv://hsuu816:{password}@watchnext.edwg2oq.mongodb.net/")
-mongo_db = conn.watchnext
-user_rating_collection = mongo_db.user_rating
-item_based_collection = mongo_db.drama_similarity_item_based
+mongo_connector = MongoDBConnector()
+user_rating_collection = mongo_connector.get_collection('user_rating')
+item_based_collection = mongo_connector.get_collection('drama_similarity_item_based')
 
 def item_based_rec():
     user_dramas = defaultdict(list)

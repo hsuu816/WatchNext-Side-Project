@@ -9,12 +9,10 @@ from server.forms.user_forms import LoginForm, SignupForm
 from server.models.mongodb import MongoDBConnector
 
 # 連線mongodb
-mongo_connect_comment = MongoDBConnector('watchnext', 'comment')
-comment_collection = mongo_connect_comment.get_collection()
-mongo_connect_drama = MongoDBConnector('watchnext', 'drama')
-drama_collection = mongo_connect_drama.get_collection()
-mongo_connect_drama = MongoDBConnector('watchnext', 'user')
-user_collection = mongo_connect_drama.get_collection()
+mongo_connector = MongoDBConnector()
+comment_collection = mongo_connector.get_collection('comment')
+drama_collection = mongo_connector.get_collection('drama')
+user_collection = mongo_connector.get_collection('user')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

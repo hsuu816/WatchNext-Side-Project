@@ -7,8 +7,8 @@ from io import BytesIO
 from modeules.mongodb import MongoDBConnector
 
 # 連線mongodb
-mongo_connect = MongoDBConnector('watchnext', 'drama')
-collection = mongo_connect.get_collection()
+mongo_connector = MongoDBConnector()
+drama_collection = mongo_connector.get_collection('drama')
 
 def imdb_yahoo_match(year):
     data = requests.get('https://datasets.imdbws.com/title.basics.tsv.gz')
@@ -76,7 +76,7 @@ def imdb_yahoo_match(year):
                             }
                             query = {"name": drama_dict["name"]}
                             update_data = {"$set": drama_dict}
-                            result = collection.update_one(query, update_data, upsert=True)
+                            result = drama_collection.update_one(query, update_data, upsert=True)
                             print(result)
                             print(name)
                             time.sleep(5)

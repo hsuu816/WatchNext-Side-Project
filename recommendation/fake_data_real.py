@@ -1,18 +1,15 @@
-import os
-from dotenv import load_dotenv
-from pymongo import MongoClient
+import sys
 import random
 from datetime import datetime
 from bson import ObjectId
-load_dotenv()
+
+sys.path.append('../app/server/models')
+from mongodb import MongoDBConnector
 
 # 連結到 Mongodb
-password = os.getenv('mongo_password')
-conn = MongoClient(f"mongodb+srv://hsuu816:{password}@watchnext.edwg2oq.mongodb.net/")
-mongo_db = conn.watchnext
-drama_collection = mongo_db.drama
-item_based_collection = mongo_db.drama_similarity_item_based
-user_rating_collection = mongo_db.user_rating
+mongo_connector = MongoDBConnector()
+drama_collection = mongo_connector.get_collection('drama')
+user_rating_collection = mongo_connector.get_collection('user_rating')
 
 
 def fake_data(user_ids, categories):

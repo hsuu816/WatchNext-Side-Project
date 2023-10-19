@@ -3,17 +3,27 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 load_dotenv()
 
-# password = os.getenv('mongo_password')
-# conn = MongoClient(f"mongodb+srv://hsuu816:{password}@watchnext.edwg2oq.mongodb.net/")
-# mongo_db = conn.watchnext
-# collection = mongo_db.drama
-
 class MongoDBConnector:
-    def __init__(self, database_name, collection_name):
+    def __init__(self):
+        self.username = os.getenv('mongo_username')
         self.password = os.getenv('mongo_password')
-        self.conn = MongoClient(f"mongodb+srv://hsuu816:{self.password}@watchnext.edwg2oq.mongodb.net/")
-        self.mongo_db = self.conn[database_name]
-        self.collection = self.mongo_db[collection_name]
+        self.url = os.getenv('mongo_url')
+        self.database = os.getenv('mongo_database')
+        self.conn = MongoClient(f"mongodb+srv://{self.username}:{self.password}@{self.url}")
+        self.mongo_db = self.conn[self.database]
+        self.collections = self._initialize_collections()
     
-    def get_collection(self):
-        return self.collection
+    def get_collection(self, collection_name):
+        return self.collections[collection_name]
+
+    def _initialize_collections(self):
+        collection_names = [
+            'comment',
+            'drama',
+            'user',
+            'user_rating',
+            'drama_similarity_content_based',
+            'drama_similarity_item_based',
+            'drama_similarity_user_based'
+        ]
+        return {name: self.mongo_db[name] for name in collection_names}

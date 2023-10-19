@@ -19,10 +19,9 @@ dash = Dash(server=app, routes_pathname_prefix="/dashboard/", external_styleshee
 dash.config.suppress_callback_exceptions = True
 
 # 連線mongodb
-mongo_connect_comment = MongoDBConnector('watchnext', 'comment')
-comment_collection = mongo_connect_comment.get_collection()
-mongo_connect_drama = MongoDBConnector('watchnext', 'drama')
-drama_collection = mongo_connect_drama.get_collection()
+mongo_connector = MongoDBConnector()
+comment_collection = mongo_connector.get_collection('comment')
+drama_collection = mongo_connector.get_collection('drama')
 
 dash.index_string = '''
     <!DOCTYPE html>

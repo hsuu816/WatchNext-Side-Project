@@ -3,10 +3,9 @@ from collections import defaultdict
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
-mongo_user_rating = MongoDBConnector('watchnext', 'user_rating')
-user_rating_collection = mongo_user_rating.get_collection()
-mongo_connect_item_based = MongoDBConnector('watchnext', 'drama_similarity_item_based')
-item_based_collection = mongo_connect_item_based.get_collection()
+mongo_connector = MongoDBConnector()
+user_rating_collection = mongo_connector.get_collection('user_rating')
+item_based_collection = mongo_connector.get_collection('drama_similarity_item_based')
 
 def item_based_rec():
     user_dramas = defaultdict(list)

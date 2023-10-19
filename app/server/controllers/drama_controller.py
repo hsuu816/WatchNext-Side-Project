@@ -11,20 +11,13 @@ from server.models.mongo_aggregate import hot_drama, drama_detail, content_based
 
 
 # 連線mongodb
-mongo_connect_comment = MongoDBConnector('watchnext', 'comment')
-comment_collection = mongo_connect_comment.get_collection()
-mongo_connect_drama = MongoDBConnector('watchnext', 'drama')
-drama_collection = mongo_connect_drama.get_collection()
-mongo_connect_drama = MongoDBConnector('watchnext', 'user')
-user_collection = mongo_connect_drama.get_collection()
-mongo_user_rating = MongoDBConnector('watchnext', 'user_rating')
-user_rating_collection = mongo_user_rating.get_collection()
-mongo_connect_content_based = MongoDBConnector('watchnext', 'drama_similarity_content_based')
-content_based_collection = mongo_connect_content_based.get_collection()
-mongo_connect_user_based = MongoDBConnector('watchnext', 'drama_similarity_user_based')
-user_based_collection = mongo_connect_user_based.get_collection()
-mongo_connect_item_based = MongoDBConnector('watchnext', 'drama_similarity_item_based')
-item_based_collection = mongo_connect_item_based.get_collection()
+mongo_connector = MongoDBConnector()
+comment_collection = mongo_connector.get_collection('comment')
+drama_collection = mongo_connector.get_collection('drama')
+user_collection = mongo_connector.get_collection('user')
+user_rating_collection = mongo_connector.get_collection('user_rating')
+content_based_collection = mongo_connector.get_collection('drama_similarity_content_based')
+item_based_collection = mongo_connector.get_collection('drama_similarity_item_based')
 
 
 @app.route('/')

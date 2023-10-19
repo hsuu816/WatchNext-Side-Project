@@ -5,8 +5,8 @@ from bs4 import BeautifulSoup
 from modeules.mongodb import MongoDBConnector
 
 # 連線mongodb
-mongo_connect = MongoDBConnector('watchnext', 'comment')
-collection = mongo_connect.get_collection()
+mongo_connector = MongoDBConnector()
+comment_collection = mongo_connector.get_collection('comment')
 
 # 獲取文章連結
 def get_all_articles(url):
@@ -82,6 +82,6 @@ def get_articles_detail(url):
         }
     
     update_data = {"$set": article_dict}
-    result = collection.update_one(query, update_data, upsert=True)
+    result = comment_collection.update_one(query, update_data, upsert=True)
     print(result)
     print(title, release_time)
