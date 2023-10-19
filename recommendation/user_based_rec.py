@@ -19,7 +19,6 @@ for rating_data in user_rating_data:
     drama = rating_data['drama_id']
     rating  = rating_data['rating']
     user_dramas[drama].append((user, rating))
-# print(user_dramas)
 
 # 標準化
 normalized_user_dramas = defaultdict(list)
@@ -27,10 +26,8 @@ for drama, users in user_dramas.items():
     rating_sum = sum([user[1]for user in users])
     rating_count = len(users)
     rating_avg = rating_sum / rating_count
-    # print(rating_avg)
     for user in users:
         normalized_user_dramas[drama].append((user[0], user[1] - rating_avg))
-# print(normalized_user_dramas)
 
 # 每部drama對不同使用者的評分配對
 drama_pair_ratings = defaultdict(list)
@@ -38,8 +35,7 @@ for drama, users in normalized_user_dramas.items():
     for user_rating1 in users:
         for user_rating2 in users:
             if user_rating1[0] != user_rating2[0]:
-                drama_pair_ratings[(user_rating1[0], user_rating2[0])].append((user_rating1[1], user_rating2[1]))
-print(drama_pair_ratings)              
+                drama_pair_ratings[(user_rating1[0], user_rating2[0])].append((user_rating1[1], user_rating2[1]))             
 
 # cosine similarity
 similarity_tuples = []

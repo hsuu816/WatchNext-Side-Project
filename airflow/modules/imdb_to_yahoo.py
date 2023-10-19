@@ -4,7 +4,7 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 import gzip
 from io import BytesIO
-from modeules.mongodb import MongoDBConnector
+from modules.mongodb import MongoDBConnector
 
 # 連線mongodb
 mongo_connector = MongoDBConnector()

@@ -88,7 +88,6 @@ document.addEventListener("DOMContentLoaded", function() {
     buttons.forEach(function(button) {
         button.addEventListener("click", function() {
             var category = encodeURIComponent(this.getAttribute("data-category"));
-            console.log("Button clicked!");
             
             var xhr = new XMLHttpRequest();
             xhr.open("GET", "/api/v1/category/" + encodeURIComponent(category), true);
@@ -143,8 +142,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // 獲取資料庫儲存的評分數據，如果沒有就預設為0
     const scoreElement = document.getElementById('rating');
     const initialScore = scoreElement ? parseInt(scoreElement.innerText) : 0;
-
-    console.log('Initial Score:', initialScore);
 
     // 依照評分數據改變星星顏色
     stars.forEach((star, index) => {

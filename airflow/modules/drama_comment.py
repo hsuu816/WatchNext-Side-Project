@@ -1,4 +1,4 @@
-from modeules.mongodb import MongoDBConnector
+from modules.mongodb import MongoDBConnector
 
 # 連線mongodb
 mongo_connector = MongoDBConnector()

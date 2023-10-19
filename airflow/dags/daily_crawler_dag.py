@@ -2,9 +2,9 @@ from airflow import DAG
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
 from datetime import timedelta
-from modeules.yahoo_crawler import *
-from modeules.ptt_crawler_daily import *
-from modeules.drama_comment import *
+from modules.yahoo_crawler import *
+from modules.ptt_crawler_daily import *
+from modules.drama_comment import *
 
 default_args = {
     'owner': 'Bonnie',

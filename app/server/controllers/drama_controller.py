@@ -60,20 +60,16 @@ def get_drama_detail(id):
 
     rating = "尚未評分"
     if current_user.is_authenticated:
-        print(current_user.id, id)
         user = user_rating_collection.find_one({"drama_id": ObjectId(id), "user_id": current_user.id})
         if user:
             rating = user.get("rating", {})
-            print(rating)
 
     return render_template('detail.html', dramas=drama_detail_data, recommend_drama=recommend_drama, rating=rating)
 
 @app.route('/api/v1/rating/<drama_id>/<int:rating>', methods=['POST'])
 def rating(drama_id, rating):
     if current_user.is_authenticated:
-        user_email = current_user.email
         user_id = current_user.id
-        print(user_email, drama_id, rating, user_id)
         # 存入資料庫
         query = {"user_id": user_id, "drama_id": ObjectId(drama_id)}
         update_data = {

@@ -48,12 +48,10 @@ for drama in drama_data:
 
 df_drama.set_index('drama_id',inplace=True)
 df = df_drama.drop(['_'], axis=1)
-# print(df)
 
 # cosine similarity
 similarity_matrix = cosine_similarity(df)
 similarity_matrix_df = pd.DataFrame(similarity_matrix, index=df.index, columns=df.index)
-# print(similarity_matrix)
 
 # 存入mongodb
 documents_to_insert = []

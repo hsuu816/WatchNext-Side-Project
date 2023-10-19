@@ -142,7 +142,6 @@ def update_dashboard(selected_time_range):
 
     bar_chart_data = comment_collection.aggregate(bar_chart_pipeline)
     bar_chart_df = pd.DataFrame(list(bar_chart_data))
-    # print(bar_chart_df)
     bar_fig = px.histogram(
         bar_chart_df,
         x='_id',
@@ -160,7 +159,6 @@ def update_dashboard(selected_time_range):
     
     # pie chart
     drama_name_list = bar_chart_df['_id'].tolist()
-    # print(drama_name_list)
     pie_chart_pipeline = [
         {"$unwind": "$categories"},
         {"$match": {"name": {"$in": drama_name_list[1:]}}},
@@ -169,7 +167,6 @@ def update_dashboard(selected_time_range):
 
     pie_chart_data = drama_collection.aggregate(pie_chart_pipeline)
     pie_chart_df = pd.DataFrame(list(pie_chart_data))
-    # print(pie_chart_df)
 
     pie_fig = px.pie(
         pie_chart_df,
