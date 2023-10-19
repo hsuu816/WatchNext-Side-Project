@@ -1,6 +1,6 @@
 // 去掉分頁按鈕
 function deletePagination() {
-    var paginationContainer = document.querySelector(".pagination");
+    const paginationContainer = document.querySelector(".pagination");
     paginationContainer.innerHTML = "";
 }
 
@@ -12,10 +12,10 @@ function keywordSearch() {
     xhr.open('GET', '/api/v1/search/' + encodeURIComponent(keyword), true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
-            var responseData = JSON.parse(xhr.responseText);
+            const responseData = JSON.parse(xhr.responseText);
             
             // 找到用於顯示戲劇資訊的容器元素
-            var dramaContainer = document.querySelector(".drama-display");
+            const dramaContainer = document.querySelector(".drama-display");
     
             // 清空容器內的現有內容
             
@@ -24,7 +24,7 @@ function keywordSearch() {
             // 遍歷responseData中的資料並插入到容器中
             if (responseData.dramas.length === 0) {
                 // 如果為空，插入顯示文字的 HTML 元素
-                var noDataElement = document.createElement("div");
+                const noDataElement = document.createElement("div");
                 noDataElement.className = "text-center";
                 noDataElement.style.width = "100%";
                 noDataElement.style.margin = "20px";
@@ -32,7 +32,7 @@ function keywordSearch() {
                 dramaContainer.appendChild(noDataElement);
             } else {
                 responseData.dramas.forEach(function(drama) {
-                    var dramaElement = document.createElement("div");
+                    const dramaElement = document.createElement("div");
                     dramaElement.className = "text-center";
         
                     // 把category一個個取出放入html
@@ -65,8 +65,8 @@ function keywordSearch() {
 
 document.addEventListener('DOMContentLoaded', function () {
     // 取得搜尋按鈕
-    var searchButton = document.getElementById('search-button');
-    var searchInput = document.getElementById('search-input');
+    const searchButton = document.getElementById('search-button');
+    const searchInput = document.getElementById('search-input');
 
     // 當點選search時，執行keywordSearch function
     searchButton.addEventListener('click', function () {
@@ -83,28 +83,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // 類型按鈕篩選
 document.addEventListener("DOMContentLoaded", function() {
-    var buttons = document.querySelectorAll("button[data-category]");
+    const buttons = document.querySelectorAll("button[data-category]");
     
     buttons.forEach(function(button) {
         button.addEventListener("click", function() {
-            var category = encodeURIComponent(this.getAttribute("data-category"));
+            const category = encodeURIComponent(this.getAttribute("data-category"));
             
-            var xhr = new XMLHttpRequest();
+            const xhr = new XMLHttpRequest();
             xhr.open("GET", "/api/v1/category/" + encodeURIComponent(category), true);
             
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4 && xhr.status === 200) {
-                    var responseData = JSON.parse(xhr.responseText);
+                    const responseData = JSON.parse(xhr.responseText);
             
                     // 找到用於顯示戲劇資訊的容器元素
-                    var dramaContainer = document.querySelector(".drama-display");
+                    const dramaContainer = document.querySelector(".drama-display");
             
                     // 清空容器內的現有內容
                     dramaContainer.innerHTML = "";
             
                     // 遍歷responseData中的資料並插入到容器中
                     responseData.dramas.forEach(function(drama) {
-                        var dramaElement = document.createElement("div");
+                        const dramaElement = document.createElement("div");
                         dramaElement.className = "text-center";
             
                         // 把category一個個取出放入html
