@@ -33,7 +33,7 @@ jobs:
 
     # Step 3  
     - name: Deploy to prod server
-      uses: appleboy/ssh-action@develop
+      uses: appleboy/ssh-action@main
       with:
         host: ${{ secrets.HOST_IP }}
         username: ${{ secrets.USERNAME }}
