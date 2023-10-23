@@ -39,6 +39,8 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_KEY }}
         script: |
+          cd /home/ubuntu/watchnext
+          git stash
           git pull origin develop
           cd /home/ubuntu/WatchNext-Side-Project/app
           conda activate watchnext
