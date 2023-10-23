@@ -42,9 +42,9 @@ jobs:
           export PATH="/home/ubuntu/miniconda3/bin:$PATH"
           cd /home/ubuntu/WatchNext-Side-Project
           git pull origin refactor
-          cd app
           conda activate watchnext
           pip install -r requirements.txt
+          cd app
           pkill -f application.py
           nohup python -u application.py >log.log 2>&1 &
 
