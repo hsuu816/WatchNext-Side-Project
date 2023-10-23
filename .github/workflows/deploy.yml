@@ -44,6 +44,7 @@ jobs:
           git pull origin refactor
           cd app
           conda activate watchnext
+          pip install -r requirements.txt
           pkill -f application.py
           nohup python -u application.py >log.log 2>&1 &
 
