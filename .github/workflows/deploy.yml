@@ -33,10 +33,10 @@ jobs:
 
     # Step 3  
     - name: Deploy to prod server
-      uses: appleboy/ssh-action@master
+      uses: appleboy/ssh-action@develop
       with:
         host: ${{ secrets.HOST_IP }}
-        username: ubuntu
+        username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_KEY }}
         script: |
           git pull origin develop
