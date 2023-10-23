@@ -39,9 +39,9 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_KEY }}
         script: |
-          cd /home/ubuntu/WatchNext-Side-Project
+          cd ~/home/ubuntu/WatchNext-Side-Project
           git pull origin develop
-          cd /home/ubuntu/WatchNext-Side-Project/app
+          cd ~/home/ubuntu/WatchNext-Side-Project/app
           conda activate watchnext
           pip install -r requirements.txt
           pkill -f application.py
