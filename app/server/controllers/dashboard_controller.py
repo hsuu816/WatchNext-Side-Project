@@ -19,7 +19,7 @@ external_stylesheets = ['https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/b
 dash = Dash(server=app, routes_pathname_prefix="/dashboard/", external_stylesheets=external_stylesheets)
 dash.config.suppress_callback_exceptions = True
 
-# 連線mongodb
+# connect to mongodb
 mongo_connector = MongoDBConnector()
 comment_collection = mongo_connector.get_collection('comment')
 drama_collection = mongo_connector.get_collection('drama')
@@ -94,7 +94,7 @@ def update_dashboard(selected_time_range):
 
     bar_fig.update_layout(
         title_text="熱門戲劇討論度排行",
-        title_x=0.5,  # 標題置中
+        title_x=0.5,  # center the title
         xaxis_title='劇名',
         yaxis_title='文章數量',
         template='plotly_white'
@@ -122,7 +122,7 @@ def update_dashboard(selected_time_range):
 
     pie_fig.update_layout(
         title_text="熱門戲劇類型",
-        title_x=0.5  # 標題置中
+        title_x=0.5 # center the title
     )
     
     # word cloud

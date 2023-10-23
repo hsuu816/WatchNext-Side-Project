@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from modules.mongodb import MongoDBConnector
 
 
-# 連線mongodb
+# connect to mongodb
 mongo_connector = MongoDBConnector()
 drama_collection = mongo_connector.get_collection('drama')
 

@@ -99,8 +99,8 @@ def get_next_page_url(soup):
         return "https://www.ptt.cc/" + next_page_link["href"]
     return None
 
-# run the ptt crawler
-def fetch_ptt_comment(url, pages):
+# daily run the ptt crawler
+def fetch_ptt_comment_daily(url, pages):
     for _ in range(pages):
         article_urls, soup = get_article_urls(url)
 
@@ -116,9 +116,27 @@ def fetch_ptt_comment(url, pages):
         else:
             break
 
+# crawler ptt all article
+def fetch_all_ptt_comments(url):
+    while url:
+        article_urls, soup = get_article_urls(url)
+
+        for article_url in article_urls:
+            article_data = get_article_content(article_url)
+            insert_to_mongo(article_data, comment_collection)
+
+        next_page_url = get_next_page_url(soup)
+        if next_page_url:
+            url = next_page_url
+            print(url)
+            time.sleep(3)
+        else:
+            print('Done')
+            break
+
 if __name__ == "__main__":
-    fetch_ptt_comment('https://www.ptt.cc/bbs/China-Drama/index.html', 3)
-    fetch_ptt_comment('https://www.ptt.cc//bbs/KoreaDrama/index.html', 3)
-    fetch_ptt_comment('https://www.ptt.cc/bbs/Japandrama/index.html', 3)
-    fetch_ptt_comment('https://www.ptt.cc/bbs/TaiwanDrama/index.html', 3)
-    fetch_ptt_comment('https://www.ptt.cc/bbs/EAseries/index.html', 3)
+    fetch_ptt_comment_daily('https://www.ptt.cc/bbs/China-Drama/index.html', 3)
+    fetch_ptt_comment_daily('https://www.ptt.cc//bbs/KoreaDrama/index.html', 3)
+    fetch_ptt_comment_daily('https://www.ptt.cc/bbs/Japandrama/index.html', 3)
+    fetch_ptt_comment_daily('https://www.ptt.cc/bbs/TaiwanDrama/index.html', 3)
+    fetch_ptt_comment_daily('https://www.ptt.cc/bbs/EAseries/index.html', 3)

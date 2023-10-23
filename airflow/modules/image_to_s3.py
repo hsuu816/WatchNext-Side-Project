@@ -5,11 +5,11 @@ import requests
 from io import BytesIO
 import time
 
-# 連線mongodb
+# connect to mongodb
 mongo_connector = MongoDBConnector()
 drama_collection = mongo_connector.get_collection('drama')
 
-# 連線至s3
+# connect to s3
 try:
     s3 = boto3.client('s3')
 except:
@@ -27,21 +27,20 @@ headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
 }
 
-# 上傳圖片到 S3
+# upload image to S3
 def upload_s3(image, name):
     try:
-        # 上傳圖片至 S3 Buckets，並設定
         image_key = f"drama_images/{name}"
         s3.upload_fileobj(image, 'watchnext', image_key, ExtraArgs={'ContentType': 'image/png', 'ACL': 'public-read'})
 
-        # 產生圖片URL
+        # generate image URL
         image_url = f"https://watchnext.s3.ap-southeast-2.amazonaws.com/{image_key}"
         return image_url
     except Exception as e:
         print(f"Error uploading image to S3: {str(e)}")
         return None
 
-# 更改mongodb內圖片網址
+# update image url in mongodb
 def change_mongo_img_url(name, img_url):
     result = drama_collection.update_one({"name": name}, {"$set": {"image": img_url}})
     print(result)

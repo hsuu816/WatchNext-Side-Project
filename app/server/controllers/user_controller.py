@@ -8,7 +8,7 @@ from server.models.user import User
 from server.forms.user_forms import LoginForm, SignupForm
 from server.models.mongodb import MongoDBConnector
 
-# 連線mongodb
+# connect to mongodb
 mongo_connector = MongoDBConnector()
 comment_collection = mongo_connector.get_collection('comment')
 drama_collection = mongo_connector.get_collection('drama')
@@ -51,7 +51,6 @@ def signup():
         user_collection.insert_one(user_dict)
         new_user = user_collection.find_one({"email": form.email.data})
         login_user(User(new_user))
-        # flash("恭喜註冊成為會員，您現在可以收藏喜歡的戲劇。")
         return redirect(url_for('get_drama'))
 
     return render_template('signup.html', form=form)

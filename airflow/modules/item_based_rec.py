@@ -16,7 +16,6 @@ def item_based_rec():
         rating  = rating_data['rating']
         user_dramas[user].append((drama, rating))
 
-    # 標準化
     normalized_user_dramas = defaultdict(list)
     for user, dramas in user_dramas.items():
         rating_sum = sum([drama[1]for drama in dramas])
@@ -25,7 +24,7 @@ def item_based_rec():
         for drama in dramas:
             normalized_user_dramas[user].append((drama[0], drama[1] - rating_avg))
 
-    # 每位使用者對不同drama間的評分配對
+    # Pairwise rating for each user across different dramas
     drama_pair_ratings = defaultdict(list)
     for user, dramas in normalized_user_dramas.items():
         for drama_rating1 in dramas:
