@@ -2,7 +2,7 @@ from airflow import DAG
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
 from datetime import timedelta
-from modeules.imdb_to_yahoo import *
+from modules.imdb_to_yahoo import *
 
 default_args = {
     'owner': 'Bonnie',

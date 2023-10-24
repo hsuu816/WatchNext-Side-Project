@@ -1,0 +1,66 @@
+name: CI/CD Deploy to AWS/EC2 - website
+
+run-name: ${{ github.actor }} | Deploy to AWS/EC2
+on:
+  push:
+    branches:
+      - refactor
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    # Step 1
+    - name: Checkout to repo
+      uses: actions/checkout@v2
+
+    - name: Get Github action IP
+      id: ip
+      uses: haythem/public-ip@v1.2
+    
+    # Step 2
+    - name: Add Github Actions IP to Security group
+      run:
+        aws ec2 authorize-security-group-ingress --group-name ${{ secrets.AWS_SG_NAME }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32    
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
+        AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+
+    # Step 3  
+    - name: Deploy to prod server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST_IP }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        script: |
+          export PATH="/home/ubuntu/miniconda3/bin:$PATH"
+          source /home/ubuntu/miniconda3/etc/profile.d/conda.sh
+          cd /home/ubuntu/WatchNext-Side-Project
+          git stash
+          git pull origin develop
+          conda activate watchnext
+          pip install -r requirements.txt
+          cd app
+          screen -d -m python3 application.py
+
+
+    # Step 4     
+    - name: Remove Github Actions IP from security group
+      run: |
+        aws ec2 revoke-security-group-ingress --group-name ${{ secrets.AWS_SG_NAME }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+      if: always()
+
+    # Step 5
+    - name: Post-deployment notification
+      run: echo "🎉 Job Deploy ${{ job.status }}."
+      if: success()

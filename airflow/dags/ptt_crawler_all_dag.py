@@ -2,8 +2,8 @@ from airflow import DAG
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
 from datetime import timedelta
-from modeules.ptt_crawler_all import *
-from modeules.drama_comment import *
+from modules.ptt_crawler import *
+from modules.drama_comment import *
 
 default_args = {
     'owner': 'Bonnie',
@@ -25,19 +25,19 @@ t1 = EmptyOperator(
 
 t2 = PythonOperator(
     task_id = 'fetch_all_ptt_china_drama_data',
-    python_callable = get_all_articles,
+    python_callable = fetch_all_ptt_comments,
     op_args = ['https://www.ptt.cc/bbs/China-Drama/index1800.html'],
     dag = dag)
 
 t3 = PythonOperator(
     task_id = 'fetch_all_ptt_korean_drama_data',
-    python_callable = get_all_articles,
+    python_callable = fetch_all_ptt_comments,
     op_args = ['https://www.ptt.cc/bbs/KoreaDrama/index2700.html'],
     dag = dag)
 
 t4 = PythonOperator(
     task_id = 'fetch_all_ptt_japan_drama_data',
-    python_callable = get_all_articles,
+    python_callable = fetch_all_ptt_comments,
     op_args = ['https://www.ptt.cc/bbs/Japandrama/index2800.html'],
     dag = dag)
 

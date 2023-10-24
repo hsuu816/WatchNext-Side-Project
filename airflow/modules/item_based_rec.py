@@ -1,12 +1,11 @@
-from modeules.mongodb import MongoDBConnector
+from modules.mongodb import MongoDBConnector
 from collections import defaultdict
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
-mongo_user_rating = MongoDBConnector('watchnext', 'user_rating')
-user_rating_collection = mongo_user_rating.get_collection()
-mongo_connect_item_based = MongoDBConnector('watchnext', 'drama_similarity_item_based')
-item_based_collection = mongo_connect_item_based.get_collection()
+mongo_connector = MongoDBConnector()
+user_rating_collection = mongo_connector.get_collection('user_rating')
+item_based_collection = mongo_connector.get_collection('drama_similarity_item_based')
 
 def item_based_rec():
     user_dramas = defaultdict(list)
@@ -16,9 +15,7 @@ def item_based_rec():
         drama = rating_data['drama_id']
         rating  = rating_data['rating']
         user_dramas[user].append((drama, rating))
-    # print(user_dramas)
 
-    # 標準化
     normalized_user_dramas = defaultdict(list)
     for user, dramas in user_dramas.items():
         rating_sum = sum([drama[1]for drama in dramas])
@@ -26,16 +23,14 @@ def item_based_rec():
         rating_avg = rating_sum / rating_count
         for drama in dramas:
             normalized_user_dramas[user].append((drama[0], drama[1] - rating_avg))
-    # print(normalized_user_dramas)
 
-    # 每位使用者對不同drama間的評分配對
+    # Pairwise rating for each user across different dramas
     drama_pair_ratings = defaultdict(list)
     for user, dramas in normalized_user_dramas.items():
         for drama_rating1 in dramas:
             for drama_rating2 in dramas:
                 if drama_rating1[0] != drama_rating2[0]:
-                    drama_pair_ratings[(drama_rating1[0], drama_rating2[0])].append((drama_rating1[1], drama_rating2[1]))
-    # print(drama_pair_ratings)              
+                    drama_pair_ratings[(drama_rating1[0], drama_rating2[0])].append((drama_rating1[1], drama_rating2[1]))         
 
     # cosine similarity
     item_based_collection.drop()
