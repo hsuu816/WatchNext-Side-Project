@@ -47,8 +47,7 @@ jobs:
           conda activate watchnext
           pip install -r requirements.txt
           cd app
-          pkill -f application.py
-          nohup python -u application.py >log.log 2>&1 &
+          screen -d -m python3 application.py
 
 
     # Step 4     
