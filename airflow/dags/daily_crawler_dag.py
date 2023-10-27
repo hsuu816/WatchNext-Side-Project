@@ -2,9 +2,9 @@ from airflow import DAG
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
 from datetime import timedelta
-from modeules.yahoo_crawler import *
-from modeules.ptt_crawler_daily import *
-from modeules.drama_comment import *
+from modules.yahoo_crawler import *
+from modules.ptt_crawler import *
+from modules.drama_comment import *
 
 default_args = {
     'owner': 'Bonnie',
@@ -31,31 +31,31 @@ t2 = PythonOperator(
 
 t3 = PythonOperator(
     task_id = 'fetch_ptt_china_drama_data',
-    python_callable = get_all_articles,
+    python_callable = fetch_ptt_comment_daily,
     op_args = ['https://www.ptt.cc/bbs/China-Drama/index.html', 3],
     dag = dag)
 
 t4 = PythonOperator(
     task_id = 'fetch_ptt_korean_drama_data',
-    python_callable = get_all_articles,
+    python_callable = fetch_ptt_comment_daily,
     op_args = ['https://www.ptt.cc//bbs/KoreaDrama/index.html', 3],
     dag = dag)
 
 t5 = PythonOperator(
     task_id = 'fetch_ptt_japan_drama_data',
-    python_callable = get_all_articles,
+    python_callable = fetch_ptt_comment_daily,
     op_args = ['https://www.ptt.cc/bbs/Japandrama/index.html', 3],
     dag = dag)
 
 t6 = PythonOperator(
     task_id = 'fetch_ptt_taiwan_drama_data',
-    python_callable = get_all_articles,
+    python_callable = fetch_ptt_comment_daily,
     op_args = ['https://www.ptt.cc/bbs/TaiwanDrama/index.html', 3],
     dag = dag)
 
 t7 = PythonOperator(
     task_id = 'fetch_ptt_ea_series_data',
-    python_callable = get_all_articles,
+    python_callable = fetch_ptt_comment_daily,
     op_args = ['https://www.ptt.cc/bbs/EAseries/index.html', 3],
     dag = dag)
 

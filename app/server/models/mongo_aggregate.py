@@ -120,8 +120,8 @@ def similarity_user_like(user_id, already_rating_drama):
     ]
     return similarity_user_like
 
-def member_content_based_rec_drama(id_list, limit):
-    member_content_based_rec_drama = [
+def member_item_based_rec_drama(id_list, limit):
+    member_item_based_rec_drama = [
         {"$match": {"drama1_id": {"$in": id_list}}},
         {"$sort": { "similarity": -1 }},
         {"$limit": limit},
@@ -144,7 +144,7 @@ def member_content_based_rec_drama(id_list, limit):
             "drama_data": {"_id": 1, "name": 1, "image": 1, "categories": 1}
         }}
     ]
-    return member_content_based_rec_drama
+    return member_item_based_rec_drama
 
 def key_word_search(keyword):
     key_word_search = {

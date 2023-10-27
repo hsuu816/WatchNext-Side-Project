@@ -1,5 +1,4 @@
-from flask import Flask, request
-from flask_migrate import Migrate
+from flask import Flask
 from config import Config
 from flask_login import LoginManager
 from werkzeug.exceptions import HTTPException
@@ -7,7 +6,6 @@ from werkzeug.exceptions import HTTPException
 
 app = Flask(__name__)
 app.config.from_object(Config)
-migrate = Migrate(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)

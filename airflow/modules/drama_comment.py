@@ -1,10 +1,9 @@
-from modeules.mongodb import MongoDBConnector
+from modules.mongodb import MongoDBConnector
 
-# 連線mongodb
-mongo_connect_comment = MongoDBConnector('watchnext', 'comment')
-comment_collection = mongo_connect_comment.get_collection()
-mongo_connect_drama = MongoDBConnector('watchnext', 'drama')
-drama_collection = mongo_connect_drama.get_collection()
+# connect to mongodb
+mongo_connector = MongoDBConnector()
+comment_collection = mongo_connector.get_collection('comment')
+drama_collection = mongo_connector.get_collection('drama')
 
 def comment_to_drama():
     drama_data = drama_collection.find({})
@@ -12,7 +11,7 @@ def comment_to_drama():
     for drama in drama_data:
         drama_list.append(drama["name"])
     
-    # 找出還沒有被貼戲劇標籤的評論
+    # Find comments that have not been tagged with drama name
     comment_data = comment_collection.find({"drama_name": {"$exists": False}})
     
     for comment in comment_data:

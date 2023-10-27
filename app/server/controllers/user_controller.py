@@ -8,13 +8,11 @@ from server.models.user import User
 from server.forms.user_forms import LoginForm, SignupForm
 from server.models.mongodb import MongoDBConnector
 
-# 連線mongodb
-mongo_connect_comment = MongoDBConnector('watchnext', 'comment')
-comment_collection = mongo_connect_comment.get_collection()
-mongo_connect_drama = MongoDBConnector('watchnext', 'drama')
-drama_collection = mongo_connect_drama.get_collection()
-mongo_connect_drama = MongoDBConnector('watchnext', 'user')
-user_collection = mongo_connect_drama.get_collection()
+# connect to mongodb
+mongo_connector = MongoDBConnector()
+comment_collection = mongo_connector.get_collection('comment')
+drama_collection = mongo_connector.get_collection('drama')
+user_collection = mongo_connector.get_collection('user')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -53,7 +51,6 @@ def signup():
         user_collection.insert_one(user_dict)
         new_user = user_collection.find_one({"email": form.email.data})
         login_user(User(new_user))
-        # flash("恭喜註冊成為會員，您現在可以收藏喜歡的戲劇。")
         return redirect(url_for('get_drama'))
 
     return render_template('signup.html', form=form)

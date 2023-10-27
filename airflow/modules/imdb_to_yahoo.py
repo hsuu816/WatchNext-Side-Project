@@ -4,11 +4,11 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 import gzip
 from io import BytesIO
-from modeules.mongodb import MongoDBConnector
+from modules.mongodb import MongoDBConnector
 
-# 連線mongodb
-mongo_connect = MongoDBConnector('watchnext', 'drama')
-collection = mongo_connect.get_collection()
+# connect to mongodb
+mongo_connector = MongoDBConnector()
+drama_collection = mongo_connector.get_collection('drama')
 
 def imdb_yahoo_match(year):
     data = requests.get('https://datasets.imdbws.com/title.basics.tsv.gz')
@@ -16,22 +16,19 @@ def imdb_yahoo_match(year):
     with gzip.open(compressed_data, 'rt', encoding='utf-8') as gzipped_file:
         header = gzipped_file.readline().strip().split('\t')
         for line in gzipped_file:
-            # 拆分每一行成欄位
             fields = line.strip().split('\t')
 
-            # 確保欄位數量與標頭行一致
+            # Ensure the number of fields matches the header line
             if len(fields) != len(header):
                 continue
 
-            # 建立欄位名稱到值的映射
             record = dict(zip(header, fields))
 
-            # 如果 'types' 欄位的值是 'tv'，則處理這條記錄
             if record['titleType'] == 'tvSeries' and record['startYear'] == year:
                 drama_name = record['primaryTitle']
+                # If the word count is greater than 26, discard the last word
                 max_chars = 26
                 if len(drama_name) > max_chars:
-                # 捨去最後一個詞
                     truncated_name = drama_name[:max_chars].rsplit(' ', 1)[0]
                 else:
                     truncated_name = drama_name
@@ -76,7 +73,7 @@ def imdb_yahoo_match(year):
                             }
                             query = {"name": drama_dict["name"]}
                             update_data = {"$set": drama_dict}
-                            result = collection.update_one(query, update_data, upsert=True)
+                            result = drama_collection.update_one(query, update_data, upsert=True)
                             print(result)
                             print(name)
                             time.sleep(5)

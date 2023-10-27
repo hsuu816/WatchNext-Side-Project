@@ -2,7 +2,7 @@ from airflow import DAG
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
 from datetime import timedelta
-from modeules.item_based_rec import *
+from modules.item_based_rec import *
 
 default_args = {
     'owner': 'Bonnie',

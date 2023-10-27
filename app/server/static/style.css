@@ -1,8 +1,8 @@
 .drama {
     display: flex;
     align-items: flex-start;
-    border-bottom: 1px solid #a39898; /* 添加底部邊框線 */
-    padding-bottom: 20px; /* 調整間距 */
+    border-bottom: 1px solid #a39898;
+    padding-bottom: 20px;
 }
 
 .drama-img {
@@ -21,9 +21,9 @@
 }
 
 .recommend-img {
-    width: 100%; /* 設置圖片寬度為100% */
+    width: 100%;
     height: 400px;
-    object-fit: cover; /* 保持圖片的寬高比並填滿圖片容器 */
+    object-fit: cover;
 }
 
 .drama_description {
@@ -77,11 +77,11 @@
     background-color: rgb(238, 239, 242);
     margin: 10px;
     height: 580px;
-    overflow-y: auto; /* 添加垂直滾動條 */
+    overflow-y: auto; /* add a vertical scroll bar */
 }
 
 #rating-stars i {
-    font-size: 24px; /* 星星大小 */
+    font-size: 24px; /* star size */
 }
 
 .rating-drama {
@@ -98,8 +98,8 @@
 .drama-display {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;  /* 水平置中 */
-    align-items: center;      /* 垂直置中 */
+    justify-content: center; 
+    align-items: center;
 }
 
 .btn-display {
@@ -117,6 +117,6 @@
 .recommend-drama-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;  /* 水平置中 */
-    align-items: center;      /* 垂直置中 */
+    justify-content: center;
+    align-items: center;
 }

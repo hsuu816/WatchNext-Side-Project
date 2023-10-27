@@ -42,10 +42,6 @@
               </li>
             {% endif %}
           </ul>
-          <!-- <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-sm btn-outline-secondary text-white" type="button">Search</button>
-          </form> -->
         </div>
       </div>
     </nav>
@@ -110,7 +106,7 @@
   <p class="text-center blockquote">你可能會喜歡</p>
   <div class="row no-gutters">
     {% for drama in recommend_drama %}
-      <div class="col-md-3"> <!-- 每個卡片佔用4分之1的寬度-->
+      <div class="col-md-3">
           <div class="card mx-auto" style="width: 18rem;">
             <a href="/api/v1/detail/{{ drama.detail[0]._id }}">
               <img src="{{ drama.detail[0].image }}" class="card-img-top recommend-img" alt="{{ drama.detail[0].name }}">

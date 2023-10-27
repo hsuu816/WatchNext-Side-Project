@@ -1,12 +1,12 @@
 import requests
 from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
-from modeules.mongodb import MongoDBConnector
+from modules.mongodb import MongoDBConnector
 
 
-# 連線mongodb
-mongo_connect = MongoDBConnector('watchnext', 'drama')
-collection = mongo_connect.get_collection()
+# connect to mongodb
+mongo_connector = MongoDBConnector()
+drama_collection = mongo_connector.get_collection('drama')
 
 def fetch_drama_data(page):
     drama_urls = []
@@ -50,6 +50,6 @@ def fetch_drama_data(page):
         }
         query = {"name": drama_dict["name"]}
         update_data = {"$set": drama_dict}
-        result = collection.update_one(query, update_data, upsert=True)
+        result = drama_collection.update_one(query, update_data, upsert=True)
         print(result)
         print(name)

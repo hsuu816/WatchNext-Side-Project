@@ -1,10 +1,10 @@
-// 去掉分頁按鈕
+// remove pagination buttons
 function deletePagination() {
-    var paginationContainer = document.querySelector(".pagination");
+    const paginationContainer = document.querySelector(".pagination");
     paginationContainer.innerHTML = "";
 }
 
-// 搜尋功能篩選
+// filtering in search function
 function keywordSearch() {
     var keyword = document.getElementById('search-input').value;
 
@@ -12,19 +12,17 @@ function keywordSearch() {
     xhr.open('GET', '/api/v1/search/' + encodeURIComponent(keyword), true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
-            var responseData = JSON.parse(xhr.responseText);
+            const responseData = JSON.parse(xhr.responseText);
             
-            // 找到用於顯示戲劇資訊的容器元素
-            var dramaContainer = document.querySelector(".drama-display");
+            // locate the container element for displaying drama information
+            const dramaContainer = document.querySelector(".drama-display");
     
-            // 清空容器內的現有內容
-            
+            // clear the existing content inside the container
             dramaContainer.innerHTML = "";
     
-            // 遍歷responseData中的資料並插入到容器中
             if (responseData.dramas.length === 0) {
-                // 如果為空，插入顯示文字的 HTML 元素
-                var noDataElement = document.createElement("div");
+                // If empty, insert HTML element for displaying text
+                const noDataElement = document.createElement("div");
                 noDataElement.className = "text-center";
                 noDataElement.style.width = "100%";
                 noDataElement.style.margin = "20px";
@@ -32,14 +30,14 @@ function keywordSearch() {
                 dramaContainer.appendChild(noDataElement);
             } else {
                 responseData.dramas.forEach(function(drama) {
-                    var dramaElement = document.createElement("div");
+                    const dramaElement = document.createElement("div");
                     dramaElement.className = "text-center";
         
-                    // 把category一個個取出放入html
+                    // extract and insert each category into HTML
                     const categoriesHTML = drama.categories.map(category => `
                         <span class="badge rounded-pill bg-primary text-white">${category}</span>`).join('');
                     
-                    // 生成html內容
+                    // generate HTML content
                     dramaElement.innerHTML = `
                         <div class="card drama_list" style="width: 18rem;">
                             <a href="/api/v1/detail/${drama._id.$oid}">
@@ -53,7 +51,7 @@ function keywordSearch() {
                         </div>
                     `;
         
-                    // 插入到html容器中
+                    // insert into the HTML container
                     dramaContainer.appendChild(dramaElement);
                 });
             }
@@ -64,15 +62,16 @@ function keywordSearch() {
 };
 
 document.addEventListener('DOMContentLoaded', function () {
-    // 取得搜尋按鈕
-    var searchButton = document.getElementById('search-button');
-    var searchInput = document.getElementById('search-input');
+    // get search button
+    const searchButton = document.getElementById('search-button');
+    // get search input element
+    const searchInput = document.getElementById('search-input');
 
-    // 當點選search時，執行keywordSearch function
+    // When the search button is clicked, execute the keywordSearch function
     searchButton.addEventListener('click', function () {
         keywordSearch();
     });
-    
+    // When the pressed key is 'Enter', execute the keywordSearch function
     searchInput.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
             event.preventDefault();
@@ -81,37 +80,32 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// 類型按鈕篩選
+// filtering in categories button
 document.addEventListener("DOMContentLoaded", function() {
-    var buttons = document.querySelectorAll("button[data-category]");
+    const buttons = document.querySelectorAll("button[data-category]");
     
     buttons.forEach(function(button) {
         button.addEventListener("click", function() {
-            var category = encodeURIComponent(this.getAttribute("data-category"));
-            console.log("Button clicked!");
+            const category = encodeURIComponent(this.getAttribute("data-category"));
             
-            var xhr = new XMLHttpRequest();
+            const xhr = new XMLHttpRequest();
             xhr.open("GET", "/api/v1/category/" + encodeURIComponent(category), true);
             
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4 && xhr.status === 200) {
-                    var responseData = JSON.parse(xhr.responseText);
+                    const responseData = JSON.parse(xhr.responseText);
             
-                    // 找到用於顯示戲劇資訊的容器元素
-                    var dramaContainer = document.querySelector(".drama-display");
+                    const dramaContainer = document.querySelector(".drama-display");
             
-                    // 清空容器內的現有內容
                     dramaContainer.innerHTML = "";
             
-                    // 遍歷responseData中的資料並插入到容器中
                     responseData.dramas.forEach(function(drama) {
-                        var dramaElement = document.createElement("div");
+                        const dramaElement = document.createElement("div");
                         dramaElement.className = "text-center";
             
-                        // 把category一個個取出放入html
                         const categoriesHTML = drama.categories.map(category => `
                             <span class="badge rounded-pill bg-primary text-white">${category}</span>`).join('');
-                        // 生成html內容
+
                         dramaElement.innerHTML = `
                             <div class="card drama_list" style="width: 18rem;">
                                 <a href="/api/v1/detail/${drama._id.$oid}">
@@ -125,7 +119,6 @@ document.addEventListener("DOMContentLoaded", function() {
                             </div>
                         `;
             
-                        // 插入到html容器中
                         dramaContainer.appendChild(dramaElement);
                     });
                     deletePagination();
@@ -137,16 +130,15 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
-// 評分星星顯示
+// star rating display
 document.addEventListener('DOMContentLoaded', function () {
     const stars = document.querySelectorAll('#rating-stars i');
-    // 獲取資料庫儲存的評分數據，如果沒有就預設為0
+    // Retrieve the rating data
     const scoreElement = document.getElementById('rating');
+    // defaulting to 0 if none exists
     const initialScore = scoreElement ? parseInt(scoreElement.innerText) : 0;
 
-    console.log('Initial Score:', initialScore);
-
-    // 依照評分數據改變星星顏色
+    // change star colors based on the rating data
     stars.forEach((star, index) => {
         const isStarActive = index < initialScore;
         star.classList.toggle('active', isStarActive);
@@ -158,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const clickedStar = this;
             const clickedStarIndex = parseInt(clickedStar.getAttribute('data-star'));
 
-            // 依照點擊星星來改變顏色
+            // change colors based on the clicked star
             stars.forEach((s, index) => {
                 if (index + 1 <= clickedStarIndex) {
                     s.classList.add('active');
@@ -173,11 +165,11 @@ document.addEventListener('DOMContentLoaded', function () {
             const dramaId = this.parentElement.getAttribute('data-movie-id');
             const selectedStars = document.querySelectorAll('#rating-stars i.active').length;
 
-            // 將評分數據發送到後端
+            // send rating data to backend
             fetch(`/api/v1/rating/${dramaId}/${selectedStars}`, { method: 'POST' })
                 .then(response => response.json())
                 .then(data => {
-                    // 更新前端顯示的評分
+                    // Update frontend display of the rating
                     document.querySelector('#rating').innerText = `${data.rating}`;
                 });
         });

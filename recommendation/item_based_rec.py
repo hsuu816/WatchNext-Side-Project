@@ -1,18 +1,15 @@
-import os
-from dotenv import load_dotenv
+import sys
 from collections import defaultdict
 import numpy as np
-from pymongo import MongoClient
 from sklearn.metrics.pairwise import cosine_similarity
 
-load_dotenv()
+sys.path.append('../app/server/models')
+from mongodb import MongoDBConnector
 
 # 連結到 Mongodb
-password = os.getenv('mongo_password')
-conn = MongoClient(f"mongodb+srv://hsuu816:{password}@watchnext.edwg2oq.mongodb.net/")
-mongo_db = conn.watchnext
-user_rating_collection = mongo_db.user_rating
-item_based_collection = mongo_db.drama_similarity_item_based
+mongo_connector = MongoDBConnector()
+user_rating_collection = mongo_connector.get_collection('user_rating')
+item_based_collection = mongo_connector.get_collection('drama_similarity_item_based')
 
 def item_based_rec():
     user_dramas = defaultdict(list)
@@ -22,7 +19,6 @@ def item_based_rec():
         drama = rating_data['drama_id']
         rating  = rating_data['rating']
         user_dramas[user].append((drama, rating))
-    # print(user_dramas)
 
     # 標準化
     normalized_user_dramas = defaultdict(list)
@@ -32,7 +28,6 @@ def item_based_rec():
         rating_avg = rating_sum / rating_count
         for drama in dramas:
             normalized_user_dramas[user].append((drama[0], drama[1] - rating_avg))
-    # print(normalized_user_dramas)
 
     # 每位使用者對不同drama間的評分配對
     drama_pair_ratings = defaultdict(list)
@@ -40,8 +35,7 @@ def item_based_rec():
         for drama_rating1 in dramas:
             for drama_rating2 in dramas:
                 if drama_rating1[0] != drama_rating2[0]:
-                    drama_pair_ratings[(drama_rating1[0], drama_rating2[0])].append((drama_rating1[1], drama_rating2[1]))
-    # print(drama_pair_ratings)              
+                    drama_pair_ratings[(drama_rating1[0], drama_rating2[0])].append((drama_rating1[1], drama_rating2[1]))             
 
     # cosine similarity
     item_based_collection.drop()
