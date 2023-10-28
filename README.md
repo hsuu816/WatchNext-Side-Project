@@ -1,7 +1,7 @@
 # WatchNext-Side-Project
 **A drama recommendation website that compiles drama information and review.**
 
-Website : https://www.watchnexts.com/  
+Website : https://www.watchnexts.com  
 
 Test Account：  
 Login to try drama rating function.
@@ -27,34 +27,36 @@ Login to try drama rating function.
 ### Networking
 - Nginx
 - HTTPS / SSL
-### Date Visualization
+### Data Visualization
 - Dash
 - Plotly
+
 ## Structure
 ![structure](https://github.com/hsuu816/WatchNext-Side-Project/assets/69642094/bdb3fd89-de6e-4d2f-b6c9-320c032da87c)
 ## Features
 ### Search dramas
-Search for dramas of interest using category or keyword.
+- Search for dramas of interest using category or keyword.
 
 ![Search dramas by category and keyword](https://github.com/hsuu816/WatchNext-Side-Project/assets/69642094/45d9350b-5983-4c18-8698-e8ac3346961b)
 
 ### Drama information, review and recommended dramas
-Integrate drama information and reviews, and utilize content-based recommendation to calculate and recommend dramas that are most relevant to the selected one.
+- Integrated drama information and reviews.
+- Utilized content-based recommendation to calculate and recommend dramas that are most relevant to the selected one.
 
 ![Drama information, review and recommended dramas](https://github.com/hsuu816/WatchNext-Side-Project/assets/69642094/07280cc3-93d1-4301-a2a7-c4f0ab37abf4)
 
-
-### Rating drama
-Record rated dramas and use Item-based collaborative filtering to calculate and recommend dramas with the highest similarity to those rated four stars or above.
+### Rating drama and recommended dramas
+- Record rated dramas in member page.
+- Utilized Item-based collaborative filtering to recommend dramas with the highest similarity to those rated four stars or above.
 
 ![Rating drama and recommendation](https://github.com/hsuu816/WatchNext-Side-Project/assets/69642094/8513e058-6281-4883-ad2f-2f02159b8532)
 
 
 ### Dashboard
-Dashboard of popular trends in drama review.
+- Dashboard of popular trends in drama review.
 
 ![dashboard](https://github.com/hsuu816/WatchNext-Side-Project/assets/69642094/2386e91d-3990-419c-9923-34309b7cffe8)
 
-## Contact Me
+## Author
 Shih Yun Hsu  
-hsuu816@gmail.com
+:email: hsuu816@gmail.com
