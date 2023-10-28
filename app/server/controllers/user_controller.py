@@ -24,6 +24,8 @@ def login():
             if check_password_hash(password, form.password.data):
                 login_user(User(user))
                 return redirect(url_for('get_drama'))
+            else:
+                flash("密碼錯誤，請重新輸入。")
         else:
             flash("帳密錯誤，請重新輸入。")
             return render_template('login.html', form=form)
