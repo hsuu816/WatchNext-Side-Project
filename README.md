@@ -32,7 +32,10 @@ Login to try drama rating function.
 - Plotly
 
 ## Structure
-![watch next 架構圖](https://github.com/hsuu816/WatchNext-Side-Project/assets/69642094/19a3edde-efdf-4180-b18c-400947f2695c)
+![watch next 架構圖_加s3](https://github.com/hsuu816/WatchNext-Side-Project/assets/69642094/5db7da0e-3aa6-4b1b-9b9d-866a93d1d937)
+
+
+
 
 ## Features
 ### Search dramas
