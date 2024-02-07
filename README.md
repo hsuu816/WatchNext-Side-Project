@@ -20,7 +20,7 @@ Login to try drama rating function.
 - HTML
 - CSS
 - JavaScript
-- Bootstramp
+- Bootstrap
 ### Cloud Service
 - AWS EC2
 - CloudWatch
